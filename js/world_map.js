@@ -16,9 +16,10 @@ var path = d3.geo.path().projection(projection);
 // Load data parallel
 queue()
 	.defer(d3.json, "data/world-110m.json")
+	.defer(d3.json, "data/alliances.json")
 	.await(createVisualization);
 
-function createVisualization(error, data1) {
+function createVisualization(error, data1, data2) {
 	var world = topojson.feature(data1, data1.objects.countries).features;
 
 	svg.selectAll("path")
@@ -26,6 +27,27 @@ function createVisualization(error, data1) {
 		.enter()
 		.append("path")
 		.attr("d", path);
+
+	svg.selectAll("circle")
+		.data(data2.nodes)
+		.enter()
+		.append("circle")
+		.attr("r", 5)
+		.attr("cx", 0)
+		.attr("cy", 0)
+		.style("fill", "red")
+		.attr("transform", function(d) {
+			return "translate(" + projection([d.longitude, d.latitude]) + ")";
+		});
+
+	// svg.selectAll("line")
+	// 	.data(data2.links["1816"])
+	// 	.enter()
+	// 	.append("line")
+	// 	.attr("x1", function(d) {
+	// 		data2.nodesd["source"]
+			
+	// 	})
 }
 
 function outputUpdate(y) { 
