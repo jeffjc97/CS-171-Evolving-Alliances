@@ -27,3 +27,10 @@ function createVisualization(error, data1) {
 		.append("path")
 		.attr("d", path);
 }
+
+function outputUpdate(y) { 
+	document.querySelector('#output').value = y; 
+	var year = d3.select("#year").property("value"); 
+	console.log(year);
+  }
+
