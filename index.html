@@ -7,8 +7,13 @@
 	<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
+	<div id="slider">
+		<label for="year">Year</label>
+		<input type="range" min="1916" max="2012" value="1970" id="year" step="1" oninput="outputUpdate(value)">
+		<output for="year" id="output">1970</output>
+	</div>
 	<div id="world-map"></div>
+
 
 	<script src="js/jquery.min.js"></script>
 	<script src="js/d3.min.js"></script>
