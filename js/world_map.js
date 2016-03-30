@@ -5,6 +5,8 @@ var svg = d3.select("#world-map").append("svg")
 	.attr("width", width)
 	.attr("height", height);
 
+var nodesById;
+
 var projection = d3.geo.mercator()
 					.translate([width/2, height/2]);
 
@@ -37,17 +39,50 @@ function createVisualization(error, data1, data2) {
 		.attr("cy", 0)
 		.style("fill", "red")
 		.attr("transform", function(d) {
+			console.log(projection([d.longitude, d.latitude]));
 			return "translate(" + projection([d.longitude, d.latitude]) + ")";
 		});
 
-	// svg.selectAll("line")
-	// 	.data(data2.links["1816"])
-	// 	.enter()
-	// 	.append("line")
-	// 	.attr("x1", function(d) {
-	// 		data2.nodesd["source"]
-			
-	// 	})
+	nodesById = {};
+	data2.nodes.forEach(function(d){nodesById[d.id] = d});
+
+	svg.selectAll("line")
+		.data(data2.links["1816"])
+	 	.enter()
+	 	.append("line")
+		.style("stroke", "red")
+	 	.attr("x1", function(d) {
+			var id = d.source;
+			if (id in nodesById){
+				var xy = projection([nodesById[id].longitude, nodesById[id].latitude])
+				return xy[0];
+			}
+			return 0
+		})
+		.attr("y1", function(d) {
+			var id = d.source;
+			if (id in nodesById){
+				var xy = projection([nodesById[id].longitude, nodesById[id].latitude])
+				return xy[1];
+			}
+			return 0
+		})
+		.attr("x2", function(d) {
+			var id = d.target;
+			if (id in nodesById){
+				var xy = projection([nodesById[id].longitude, nodesById[id].latitude])
+				return xy[0];
+			}
+			return 0
+		})
+		.attr("y2", function(d) {
+			var id = d.target;
+			if (id in nodesById){
+				var xy = projection([nodesById[id].longitude, nodesById[id].latitude])
+				return xy[1];
+			}
+			return 0
+		})
 }
 
 function outputUpdate(y) { 
