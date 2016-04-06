@@ -60,7 +60,6 @@ function createVisualization() {
 
 	var line = svg.selectAll("line")
 		.data(data2.links[year]);
-
 	line
 	 	.enter()
 	 	.append("line")
