@@ -135,4 +135,6 @@ function zoom() {
   svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
   svg.selectAll("circle")
   	.attr("r", 5 / d3.event.scale);
+	svg.selectAll("line")
+		.attr("stroke-width", 1/d3.event.scale);
 }
