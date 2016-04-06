@@ -34,6 +34,7 @@ function createVisualization() {
 	var world = topojson.feature(data1, data1.objects.countries).features;
 
 	year = d3.select("#year").property("value");
+	document.querySelector('#output').value = year;
 	console.log(year);
 
 	svg.selectAll("path")
