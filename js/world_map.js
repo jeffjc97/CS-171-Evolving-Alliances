@@ -19,10 +19,22 @@ var path = d3.geo.path().projection(projection);
 queue()
 	.defer(d3.json, "data/world-110m.json")
 	.defer(d3.json, "data/alliances.json")
-	.await(createVisualization);
+	.await(function(error, mapTop, alliances){
+		data1 = mapTop;
+		data2 = alliances;
 
-function createVisualization(error, data1, data2) {
+		nodesById = {};
+		data2.nodes.forEach(function(d){nodesById[d.id] = d});
+		console.log(nodesById);
+
+		createVisualization();
+	});
+
+function createVisualization() {
 	var world = topojson.feature(data1, data1.objects.countries).features;
+
+	year = d3.select("#year").property("value");
+	console.log(year);
 
 	svg.selectAll("path")
 		.data(world)
@@ -43,11 +55,13 @@ function createVisualization(error, data1, data2) {
 			return "translate(" + projection([d.longitude, d.latitude]) + ")";
 		});
 
-	nodesById = {};
-	data2.nodes.forEach(function(d){nodesById[d.id] = d});
+	console.log(data2.links[1816]);
+	console.log(year);
 
-	svg.selectAll("line")
-		.data(data2.links["1816"])
+	var line = svg.selectAll("line")
+		.data(data2.links[year]);
+
+	line
 	 	.enter()
 	 	.append("line")
 		.style("stroke", "red")
@@ -83,11 +97,8 @@ function createVisualization(error, data1, data2) {
 			}
 			return 0
 		})
+
+	line.selectAll("line").remove();
 }
 
-function outputUpdate(y) { 
-	document.querySelector('#output').value = y; 
-	var year = d3.select("#year").property("value"); 
-	console.log(year);
-  }
 
