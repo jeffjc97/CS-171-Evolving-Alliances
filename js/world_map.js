@@ -76,6 +76,7 @@ function updateVisualization() {
 	 	.enter()
 	 	.append("line")
 		.style("stroke", "red")
+		.style("stroke-width", )
 	 	.attr("x1", function(d) {
 			var id = d.source;
 			if (id in nodesById){
