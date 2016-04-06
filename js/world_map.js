@@ -9,12 +9,14 @@ $('.stop-btn').click(function() {
 	animateAlliances("end");
 });
 
+var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", move);
+
 var svg = d3.select("#world-map").append("svg")
 	.attr("width", width)
 	.attr("height", height)
 	.append("g")
-    	.call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
-  	.append("g");
+		.call(zoom)
+	.append("g");
 
 var nodesById;
 
@@ -73,10 +75,10 @@ function updateVisualization() {
 	var line = svg.selectAll("line")
 		.data(data2.links[year]);
 	line
-	 	.enter()
-	 	.append("line")
+		.enter()
+		.append("line")
 		.style("stroke", "red")
-	 	.attr("x1", function(d) {
+		.attr("x1", function(d) {
 			var id = d.source;
 			if (id in nodesById){
 				var xy = projection([nodesById[id].longitude, nodesById[id].latitude])
@@ -113,7 +115,7 @@ function updateVisualization() {
 }
 
 function animateAlliances(type) {
-	if (type == "start") {
+	if (type == "start" && intervalID == -1) {
 		curYear = 0;
 		intervalID = setInterval(function() {
 			console.log(curYear);
@@ -123,7 +125,7 @@ function animateAlliances(type) {
 		}, 100);
 
 	}
-	else {
+	else if (type == "end") {
 		if (intervalID != -1) {
 			clearInterval(intervalID);
 			intervalID = -1;
@@ -131,10 +133,10 @@ function animateAlliances(type) {
 	}
 }
 
-function zoom() {
-  svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-  svg.selectAll("circle")
-  	.attr("r", 5 / d3.event.scale);
+function move() {
+	svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+	svg.selectAll("circle")
+		.attr("r", 5 / d3.event.scale);
 	svg.selectAll("line")
 		.attr("stroke-width", 1/d3.event.scale);
 }
