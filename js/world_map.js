@@ -97,7 +97,7 @@ function createVisualization() {
 			return 0
 		})
 
-	line.selectAll("line").remove();
+	line.exit().remove();
 }
 
 
