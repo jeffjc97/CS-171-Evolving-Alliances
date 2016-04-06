@@ -18,8 +18,8 @@ with open('countries.csv', 'rb') as csvfile:
     reader = csv.reader(csvfile)
     counter = 1
     for row in reader:
-        if row[3] in country_codes:
-            json_data["nodes"].append({"id": country_codes[row[3]], "country": row[3], "latitude": row[1], "longitude": row[2], "country_code": row[0]})
+        if row[2] in country_codes:
+            json_data["nodes"].append({"id": country_codes[row[2]], "country": row[2], "latitude": row[0], "longitude": row[1]})
 print "nodes done"
 
 with open('alliance_data/alliance_v4.1_by_dyad_yearly.csv') as csvfile:

@@ -47,7 +47,7 @@ function createVisualization(error, data1, data2) {
 	data2.nodes.forEach(function(d){nodesById[d.id] = d});
 
 	svg.selectAll("line")
-		.data(data2.links["1816"])
+		.data(data2.links["2000"])
 	 	.enter()
 	 	.append("line")
 		.style("stroke", "red")
