@@ -11,7 +11,10 @@ $('.stop-btn').click(function() {
 
 var svg = d3.select("#world-map").append("svg")
 	.attr("width", width)
-	.attr("height", height);
+	.attr("height", height)
+	.append("g")
+    	.call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
+  	.append("g");
 
 var nodesById;
 
@@ -117,7 +120,7 @@ function animateAlliances(type) {
 			$('#year').val(curYear + 1816);
 			curYear = (curYear + 1) % 195;
 			updateVisualization();
-		}, 200);
+		}, 100);
 
 	}
 	else {
@@ -126,4 +129,10 @@ function animateAlliances(type) {
 			intervalID = -1;
 		}
 	}
+}
+
+function zoom() {
+  svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+  svg.selectAll("circle")
+  	.attr("r", 5 / d3.event.scale);
 }
