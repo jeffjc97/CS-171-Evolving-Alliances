@@ -1,6 +1,14 @@
 var width = 1000,
 	height = 600;
 
+var intervalID = -1;
+$('.animate-btn').click(function() {
+	animateAlliances("start");
+});
+$('.stop-btn').click(function() {
+	animateAlliances("end");
+});
+
 var svg = d3.select("#world-map").append("svg")
 	.attr("width", width)
 	.attr("height", height);
@@ -27,10 +35,10 @@ queue()
 		data2.nodes.forEach(function(d){nodesById[d.id] = d});
 		console.log(nodesById);
 
-		createVisualization();
+		updateVisualization();
 	});
 
-function createVisualization() {
+function updateVisualization() {
 	var world = topojson.feature(data1, data1.objects.countries).features;
 
 	year = d3.select("#year").property("value");
@@ -100,4 +108,21 @@ function createVisualization() {
 	line.exit().remove();
 }
 
+function animateAlliances(type) {
+	if (type == "start") {
+		curYear = 0;
+		intervalID = setInterval(function() {
+			console.log(curYear);
+			$('#year').val(curYear + 1816);
+			curYear = (curYear + 1) % 195;
+			updateVisualization();
+		}, 200);
 
+	}
+	else {
+		if (intervalID != -1) {
+			clearInterval(intervalID);
+			intervalID = -1;
+		}
+	}
+}
