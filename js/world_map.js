@@ -9,6 +9,15 @@ $('.stop-btn').click(function() {
 	animateAlliances("end");
 });
 
+$('.alliance-type-btn').click(function() {
+	if (!$(this).hasClass('active')) {
+		$('#alliance-type-select').find('.active').removeClass('active');
+		$(this).addClass('active');
+		animateAlliances("end");
+		updateVisualization();
+	}
+});
+
 var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", move);
 
 var svg = d3.select("#world-map").append("svg")
@@ -38,7 +47,6 @@ queue()
 
 		nodesById = {};
 		data2.nodes.forEach(function(d){nodesById[d.id] = d});
-		console.log(nodesById);
 
 		updateVisualization();
 	});
@@ -48,7 +56,8 @@ function updateVisualization() {
 
 	year = d3.select("#year").property("value");
 	document.querySelector('#output').value = year;
-	console.log(year);
+
+	alliance_type = +$('#alliance-type-select').find('.active').attr('atype');
 
 	svg.selectAll("path")
 		.data(world)
@@ -60,20 +69,24 @@ function updateVisualization() {
 		.data(data2.nodes)
 		.enter()
 		.append("circle")
-		.attr("r", 5)
+		.attr("r", 3)
 		.attr("cx", 0)
 		.attr("cy", 0)
 		.style("fill", "red")
 		.attr("transform", function(d) {
-			console.log(projection([d.longitude, d.latitude]));
 			return "translate(" + projection([d.longitude, d.latitude]) + ")";
 		});
 
-	console.log(data2.links[1816]);
-	console.log(year);
+	linkdata = data2.links[year];
+	if (alliance_type < 4) {
+		linkdata = linkdata.filter(function(a) {
+			return (+a.alliance_type[alliance_type] == 1);
+		});
+	}
 
 	var line = svg.selectAll("line")
-		.data(data2.links[year]);
+		.data(linkdata);
+
 	line
 		.enter()
 		.append("line")
@@ -118,7 +131,6 @@ function animateAlliances(type) {
 	if (type == "start" && intervalID == -1) {
 		curYear = 0;
 		intervalID = setInterval(function() {
-			console.log(curYear);
 			$('#year').val(curYear + 1816);
 			curYear = (curYear + 1) % 195;
 			updateVisualization();
@@ -136,7 +148,7 @@ function animateAlliances(type) {
 function move() {
 	svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 	svg.selectAll("circle")
-		.attr("r", 5 / d3.event.scale);
+		.attr("r", 3 / d3.event.scale);
 	svg.selectAll("line")
 		.attr("stroke-width", 1/d3.event.scale);
 }
