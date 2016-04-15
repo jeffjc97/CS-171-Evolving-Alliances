@@ -180,7 +180,6 @@ function animateAlliances(type) {
 			$('#year').val(curYear + 1816);
 			curYear = (curYear + 1) % 195;
 			updateVisualization();
-			updateCountry(250);
 		}, 100);
 
 	}
