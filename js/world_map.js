@@ -18,6 +18,8 @@ $('.alliance-type-btn').click(function() {
 	}
 });
 
+var year;
+
 var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", move);
 
 var svg = d3.select("#world-map").append("svg")
@@ -55,7 +57,6 @@ queue()
 		data2.nodes.forEach(function(d){nodesById[d.id] = d});
 
 		updateVisualization();
-		updateCountry();
 	});
 
 function updateVisualization() {
@@ -132,6 +133,8 @@ function updateVisualization() {
 		})
 
 	line.exit().remove();
+
+	updateCountry(250);
 }
 
 function animateAlliances(type) {
@@ -141,6 +144,7 @@ function animateAlliances(type) {
 			$('#year').val(curYear + 1816);
 			curYear = (curYear + 1) % 195;
 			updateVisualization();
+			updateCountry(250);
 		}, 100);
 
 	}
@@ -160,16 +164,66 @@ function move() {
 		.attr("stroke-width", 1/d3.event.scale);
 }
 
-function updateCountry(){
+function updateCountry(id){
 
 	var	codes;
 
 	year = d3.select("#year").property("value");
+	document.querySelector('#output').value = year;
 	console.log(year);
 
 	countrySvg.selectAll("path")
 		.data(world)
 		.enter()
 		.append("path")
-		.attr("d", path);
-	};
+		.attr("d", path)
+		.attr("class", "country");
+
+	d3.csv("data/ids_to_codes.csv", function(error, data){
+
+		codes = {};
+		data.forEach(function(d){
+			if (isNaN(d.id)){ return } else {
+				codes[d.id] = d;
+			}
+		});
+
+		var country = codes[id].ccode;
+
+		var allies = {};
+		//console.log(data2.links);
+		data2.links[year].forEach(function(d){
+			if (d.source == country){
+				allies[d.target] = d.alliance_type;
+			} else if (d.target == country){
+			allies[d.source] = d.alliance_type;
+			}
+		});
+		console.log(allies);
+
+		d3.selectAll(".country")
+			.style("fill", function(d) {
+				//console.log(d.id);
+				//console.log(codes[d.id]);
+				if (d.id == id){
+					return "purple"
+				} else if (d.id in codes){
+					var code = codes[d.id].ccode;
+					if (isNaN(code) || !(code in allies) ){
+						return "gray"
+					} else if (allies[code][0] == 1){
+						return "red"
+					} else if (allies[code][1] == 1){
+						return "green"
+					} else if (allies[code][2] == 1){
+						return "blue";
+					} else if (allies[code][3] == 1){
+						return "yellow";
+					}
+				}
+				return "gray"
+			});
+
+	});
+
+};
