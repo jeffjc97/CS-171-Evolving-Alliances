@@ -1,9 +1,38 @@
 var width = 1000,
 	height = 600;
 
+var intervalID = -1;
+$('.animate-btn').click(function() {
+	animateAlliances("start");
+});
+$('.stop-btn').click(function() {
+	animateAlliances("end");
+});
+
+$('.alliance-type-btn').click(function() {
+	if (!$(this).hasClass('active')) {
+		$('#alliance-type-select').find('.active').removeClass('active');
+		$(this).addClass('active');
+		animateAlliances("end");
+		updateVisualization();
+	}
+});
+
+var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", move);
+
 var svg = d3.select("#world-map").append("svg")
 	.attr("width", width)
+	.attr("height", height)
+	.append("g")
+		.call(zoom)
+	.append("g");
+
+
+var countrySvg = d3.select("#country-view").append("svg")
+	.attr("width", width)
 	.attr("height", height);
+
+var world;
 
 var nodesById;
 
@@ -25,16 +54,18 @@ queue()
 
 		nodesById = {};
 		data2.nodes.forEach(function(d){nodesById[d.id] = d});
-		console.log(nodesById);
 
-		createVisualization();
+		updateVisualization();
+		updateCountry();
 	});
 
-function createVisualization() {
-	var world = topojson.feature(data1, data1.objects.countries).features;
+function updateVisualization() {
+	world = topojson.feature(data1, data1.objects.countries).features;
 
 	year = d3.select("#year").property("value");
-	console.log(year);
+	document.querySelector('#output').value = year;
+
+	alliance_type = +$('#alliance-type-select').find('.active').attr('atype');
 
 	svg.selectAll("path")
 		.data(world)
@@ -46,25 +77,29 @@ function createVisualization() {
 		.data(data2.nodes)
 		.enter()
 		.append("circle")
-		.attr("r", 5)
+		.attr("r", 3)
 		.attr("cx", 0)
 		.attr("cy", 0)
 		.style("fill", "red")
 		.attr("transform", function(d) {
-			console.log(projection([d.longitude, d.latitude]));
 			return "translate(" + projection([d.longitude, d.latitude]) + ")";
 		});
 
-	console.log(data2.links[1816]);
-	console.log(year);
+	linkdata = data2.links[year];
+	if (alliance_type < 4) {
+		linkdata = linkdata.filter(function(a) {
+			return (+a.alliance_type[alliance_type] == 1);
+		});
+	}
 
 	var line = svg.selectAll("line")
-		.data(data2.links[year]);
+		.data(linkdata);
+
 	line
-	 	.enter()
-	 	.append("line")
+		.enter()
+		.append("line")
 		.style("stroke", "red")
-	 	.attr("x1", function(d) {
+		.attr("x1", function(d) {
 			var id = d.source;
 			if (id in nodesById){
 				var xy = projection([nodesById[id].longitude, nodesById[id].latitude])
@@ -100,4 +135,44 @@ function createVisualization() {
 	line.exit().remove();
 }
 
+function animateAlliances(type) {
+	if (type == "start" && intervalID == -1) {
+		curYear = 0;
+		intervalID = setInterval(function() {
+			$('#year').val(curYear + 1816);
+			curYear = (curYear + 1) % 195;
+			updateVisualization();
+		}, 100);
 
+	}
+	else if (type == "end") {
+		if (intervalID != -1) {
+			clearInterval(intervalID);
+			intervalID = -1;
+		}
+	}
+}
+
+function move() {
+	svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+	svg.selectAll("circle")
+		.attr("r", 3 / d3.event.scale);
+	svg.selectAll("line")
+		.attr("stroke-width", 1/d3.event.scale);
+}
+
+function updateCountry(){
+
+	var	codes;
+
+	d3.csv
+
+	year = d3.select("#year").property("value");
+	console.log(year);
+
+	countrySvg.selectAll("path")
+		.data(world)
+		.enter()
+		.append("path")
+		.attr("d", path);
+	};
