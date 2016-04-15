@@ -27,6 +27,7 @@ var svg = d3.select("#world-map").append("svg")
 		.call(zoom)
 	.append("g");
 
+
 var nodesById;
 
 var projection = d3.geo.mercator()
@@ -59,11 +60,34 @@ function updateVisualization() {
 
 	alliance_type = +$('#alliance-type-select').find('.active').attr('atype');
 
-	svg.selectAll("path")
+	console.log(data1);
+	var tip = d3.tip()
+		.attr('class', 'd3-tip')
+		.offset([-10, 0])
+		.html(function(d) {
+			var id = d.id;
+			console.log(id);
+			if(!(id in nodesById)){
+				return "No Data";
+			}
+
+			else {
+				return "Yay!";
+			}
+		});
+
+	svg.call(tip);
+
+
+	svg.append("g")
+		.attr("class","countries")
+		.selectAll("path")
 		.data(world)
 		.enter()
 		.append("path")
-		.attr("d", path);
+		.attr("d", path)
+		.on('mouseover',tip.show)
+		.on('mouseout',tip.hide);
 
 	svg.selectAll("circle")
 		.data(data2.nodes)
@@ -94,7 +118,7 @@ function updateVisualization() {
 		.attr("x1", function(d) {
 			var id = d.source;
 			if (id in nodesById){
-				var xy = projection([nodesById[id].longitude, nodesById[id].latitude])
+				var xy = projection([nodesById[id].longitude, nodesById[id].latitude]);
 				return xy[0];
 			}
 			return 0
@@ -102,7 +126,7 @@ function updateVisualization() {
 		.attr("y1", function(d) {
 			var id = d.source;
 			if (id in nodesById){
-				var xy = projection([nodesById[id].longitude, nodesById[id].latitude])
+				var xy = projection([nodesById[id].longitude, nodesById[id].latitude]);
 				return xy[1];
 			}
 			return 0
@@ -110,7 +134,7 @@ function updateVisualization() {
 		.attr("x2", function(d) {
 			var id = d.target;
 			if (id in nodesById){
-				var xy = projection([nodesById[id].longitude, nodesById[id].latitude])
+				var xy = projection([nodesById[id].longitude, nodesById[id].latitude]);
 				return xy[0];
 			}
 			return 0
@@ -118,11 +142,11 @@ function updateVisualization() {
 		.attr("y2", function(d) {
 			var id = d.target;
 			if (id in nodesById){
-				var xy = projection([nodesById[id].longitude, nodesById[id].latitude])
+				var xy = projection([nodesById[id].longitude, nodesById[id].latitude]);
 				return xy[1];
 			}
 			return 0
-		})
+		});
 
 	line.exit().remove();
 }
