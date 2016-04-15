@@ -2,3 +2,26 @@ path {
     stroke: white;
     stroke-width: .5px;
 }
+
+
+.tooltip-title {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.d3-tip {
+    position: absolute;
+    line-height: 1;
+    padding: 12px;
+    background: green;
+    color: #fff;
+    border-radius: 2px;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
+}

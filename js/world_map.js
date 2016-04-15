@@ -49,13 +49,17 @@ var path = d3.geo.path().projection(projection);
 queue()
 	.defer(d3.json, "data/world-110m.json")
 	.defer(d3.json, "data/alliances.json")
-	.await(function(error, mapTop, alliances){
+	.defer(d3.csv, "data/ids_to_codes.csv")
+	.await(function(error, mapTop, alliances, ids){
 		data1 = mapTop;
 		data2 = alliances;
+		data3 = ids;
 
 		nodesById = {};
 		data2.nodes.forEach(function(d){nodesById[d.id] = d});
 
+		mapidsToCodes = {}
+		data3.forEach(function(d){mapidsToCodes[d.id] = d})
 		updateVisualization();
 		updateCountry();
 	});
@@ -71,32 +75,37 @@ function updateVisualization() {
 
 
 	console.log(data1);
+
 	var tip = d3.tip()
 		.attr('class', 'd3-tip')
-		.offset([-10, 0])
 		.html(function(d) {
 			var id = d.id;
 			console.log(id);
-			if(!(id in nodesById)){
+			if(!(id in mapidsToCodes)){
 				return "No Data";
 			}
 
 			else {
-				return "Yay!";
+				return mapidsToCodes[id].statenme;
 			}
 		});
 
 	svg.call(tip);
 
 
-	svg.append("g")
-		.attr("class","countries")
+	svg
 		.selectAll("path")
 		.data(world)
 		.enter()
 		.append("path")
 		.attr("d", path)
 		.on('mouseover',tip.show)
+		.on("mousemove", function () {
+			//console.log(d3.event);
+			return tip
+				.style("top", (d3.event.pageY - 40) + "px")
+				.style("left", (d3.event.pageX) + "px");
+		})
 		.on('mouseout',tip.hide);
 
 	svg.selectAll("circle")
