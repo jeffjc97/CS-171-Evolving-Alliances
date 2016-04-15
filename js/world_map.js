@@ -27,7 +27,6 @@ var svg = d3.select("#world-map").append("svg")
 		.call(zoom)
 	.append("g");
 
-
 var countrySvg = d3.select("#country-view").append("svg")
 	.attr("width", width)
 	.attr("height", height);
@@ -164,8 +163,6 @@ function move() {
 function updateCountry(){
 
 	var	codes;
-
-	d3.csv
 
 	year = d3.select("#year").property("value");
 	console.log(year);
