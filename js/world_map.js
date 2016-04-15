@@ -29,11 +29,13 @@ var svg = d3.select("#world-map").append("svg")
 		.call(zoom)
 	.append("g");
 
+
 var countrySvg = d3.select("#country-view").append("svg")
 	.attr("width", width)
 	.attr("height", height);
 
 var world;
+
 
 var nodesById;
 
@@ -49,13 +51,17 @@ var path = d3.geo.path().projection(projection);
 queue()
 	.defer(d3.json, "data/world-110m.json")
 	.defer(d3.json, "data/alliances.json")
-	.await(function(error, mapTop, alliances){
+	.defer(d3.csv, "data/ids_to_codes.csv")
+	.await(function(error, mapTop, alliances, ids){
 		data1 = mapTop;
 		data2 = alliances;
+		data3 = ids;
 
 		nodesById = {};
 		data2.nodes.forEach(function(d){nodesById[d.id] = d});
 
+		mapidsToCodes = {}
+		data3.forEach(function(d){mapidsToCodes[d.id] = d})
 		updateVisualization();
 	});
 
@@ -65,13 +71,43 @@ function updateVisualization() {
 	year = d3.select("#year").property("value");
 	document.querySelector('#output').value = year;
 
+
 	alliance_type = +$('#alliance-type-select').find('.active').attr('atype');
 
-	svg.selectAll("path")
+
+	console.log(data1);
+
+	var tip = d3.tip()
+		.attr('class', 'd3-tip')
+		.html(function(d) {
+			var id = d.id;
+			console.log(id);
+			if(!(id in mapidsToCodes)){
+				return "No Data";
+			}
+
+			else {
+				return mapidsToCodes[id].statenme;
+			}
+		});
+
+	svg.call(tip);
+
+
+	svg
+		.selectAll("path")
 		.data(world)
 		.enter()
 		.append("path")
-		.attr("d", path);
+		.attr("d", path)
+		.on('mouseover',tip.show)
+		.on("mousemove", function () {
+			//console.log(d3.event);
+			return tip
+				.style("top", (d3.event.pageY - 40) + "px")
+				.style("left", (d3.event.pageX) + "px");
+		})
+		.on('mouseout',tip.hide);
 
 	svg.selectAll("circle")
 		.data(data2.nodes)
@@ -102,7 +138,7 @@ function updateVisualization() {
 		.attr("x1", function(d) {
 			var id = d.source;
 			if (id in nodesById){
-				var xy = projection([nodesById[id].longitude, nodesById[id].latitude])
+				var xy = projection([nodesById[id].longitude, nodesById[id].latitude]);
 				return xy[0];
 			}
 			return 0
@@ -110,7 +146,7 @@ function updateVisualization() {
 		.attr("y1", function(d) {
 			var id = d.source;
 			if (id in nodesById){
-				var xy = projection([nodesById[id].longitude, nodesById[id].latitude])
+				var xy = projection([nodesById[id].longitude, nodesById[id].latitude]);
 				return xy[1];
 			}
 			return 0
@@ -118,7 +154,7 @@ function updateVisualization() {
 		.attr("x2", function(d) {
 			var id = d.target;
 			if (id in nodesById){
-				var xy = projection([nodesById[id].longitude, nodesById[id].latitude])
+				var xy = projection([nodesById[id].longitude, nodesById[id].latitude]);
 				return xy[0];
 			}
 			return 0
@@ -126,11 +162,11 @@ function updateVisualization() {
 		.attr("y2", function(d) {
 			var id = d.target;
 			if (id in nodesById){
-				var xy = projection([nodesById[id].longitude, nodesById[id].latitude])
+				var xy = projection([nodesById[id].longitude, nodesById[id].latitude]);
 				return xy[1];
 			}
 			return 0
-		})
+		});
 
 	line.exit().remove();
 
