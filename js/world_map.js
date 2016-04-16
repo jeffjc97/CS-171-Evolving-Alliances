@@ -74,13 +74,11 @@ function updateVisualization() {
 	alliance_type = +$('#alliance-type-select').find('.active').attr('atype');
 
 
-	console.log(data1);
-
+	console.log(year);
 	var tip = d3.tip()
 		.attr('class', 'd3-tip')
 		.html(function(d) {
 			var id = d.id;
-			console.log(id);
 			if(!(id in mapidsToCodes)){
 				return "No Data";
 			}
