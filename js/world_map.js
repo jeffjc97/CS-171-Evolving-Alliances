@@ -36,6 +36,7 @@ var countrySvg = d3.select("#country-view").append("svg")
 
 var world;
 
+var codes;
 
 var nodesById;
 
@@ -60,8 +61,8 @@ queue()
 		nodesById = {};
 		data2.nodes.forEach(function(d){nodesById[d.id] = d});
 
-		mapidsToCodes = {}
-		data3.forEach(function(d){mapidsToCodes[d.id] = d})
+		codes = {}
+		data3.forEach(function(d){codes[d.id] = d});
 		updateVisualization();
 	});
 
@@ -82,12 +83,12 @@ function updateVisualization() {
 		.html(function(d) {
 			var id = d.id;
 			console.log(id);
-			if(!(id in mapidsToCodes)){
+			if(!(id in codes)){
 				return "No Data";
 			}
 
 			else {
-				return mapidsToCodes[id].statenme;
+				return codes[id].statenme;
 			}
 		});
 
@@ -201,8 +202,6 @@ function move() {
 
 function updateCountry(id){
 
-	var	codes;
-
 	year = d3.select("#year").property("value");
 	document.querySelector('#output').value = year;
 	console.log(year);
@@ -214,51 +213,39 @@ function updateCountry(id){
 		.attr("d", path)
 		.attr("class", "country");
 
-	d3.csv("data/ids_to_codes.csv", function(error, data){
+	var country = codes[id].ccode;
 
-		codes = {};
-		data.forEach(function(d){
-			if (isNaN(d.id)){ return } else {
-				codes[d.id] = d;
-			}
-		});
-
-		var country = codes[id].ccode;
-
-		var allies = {};
+	var allies = {};
 		//console.log(data2.links);
-		data2.links[year].forEach(function(d){
-			if (d.source == country){
-				allies[d.target] = d.alliance_type;
-			} else if (d.target == country){
+	data2.links[year].forEach(function(d){
+		if (d.source == country){
+			allies[d.target] = d.alliance_type;
+		} else if (d.target == country){
 			allies[d.source] = d.alliance_type;
-			}
-		});
-		console.log(allies);
-
-		d3.selectAll(".country")
-			.style("fill", function(d) {
-				//console.log(d.id);
-				//console.log(codes[d.id]);
-				if (d.id == id){
-					return "purple"
-				} else if (d.id in codes){
-					var code = codes[d.id].ccode;
-					if (isNaN(code) || !(code in allies) ){
-						return "gray"
-					} else if (allies[code][0] == 1){
-						return "red"
-					} else if (allies[code][1] == 1){
-						return "green"
-					} else if (allies[code][2] == 1){
-						return "blue";
-					} else if (allies[code][3] == 1){
-						return "yellow";
-					}
-				}
-				return "gray"
-			});
-
+		}
 	});
+	//console.log(allies);
 
+	d3.selectAll(".country")
+		.style("fill", function(d) {
+			//console.log(d.id);
+			//console.log(codes[d.id]);
+			if (d.id == id){
+				return "purple"
+			} else if (d.id in codes){
+				var code = codes[d.id].ccode;
+				if (isNaN(code) || !(code in allies) ){
+					return "gray"
+				} else if (allies[code][0] == 1){
+					return "red"
+				} else if (allies[code][1] == 1){
+					return "green"
+				} else if (allies[code][2] == 1){
+					return "blue";
+				} else if (allies[code][3] == 1){
+					return "yellow";
+				}
+			}
+			return "gray"
+		});
 };
