@@ -61,7 +61,7 @@ queue()
 		nodesById = {};
 		data2.nodes.forEach(function(d){nodesById[d.id] = d});
 
-		codes = {}
+		codes = {};
 		data3.forEach(function(d){codes[d.id] = d});
 		updateVisualization();
 	});
@@ -201,10 +201,6 @@ function move() {
 }
 
 function updateCountry(id){
-
-	year = d3.select("#year").property("value");
-	document.querySelector('#output').value = year;
-	console.log(year);
 
 	countrySvg.selectAll("path")
 		.data(world)
