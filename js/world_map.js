@@ -36,6 +36,8 @@ var countrySvg = d3.select("#country-view").append("svg")
 
 var world;
 
+var country_id;
+
 var codes;
 
 var nodesById;
@@ -108,7 +110,11 @@ function updateVisualization() {
 				.style("top", (d3.event.pageY - 40) + "px")
 				.style("left", (d3.event.pageX) + "px");
 		})
-		.on('mouseout',tip.hide);
+		.on('mouseout',tip.hide)
+		.on("click", function(d) {
+			country_id = d.id;
+			updateCountry(country_id);
+		});
 
 	svg.selectAll("circle")
 		.data(data2.nodes)
@@ -171,7 +177,8 @@ function updateVisualization() {
 
 	line.exit().remove();
 
-	updateCountry(250);
+	updateCountry(country_id);
+
 }
 
 function animateAlliances(type) {
@@ -202,14 +209,17 @@ function move() {
 
 function updateCountry(id){
 
+	year = d3.select("#year").property("value");
+	document.querySelector('#output').value = year;
+
+	country = codes[id].ccode;
+
 	countrySvg.selectAll("path")
 		.data(world)
 		.enter()
 		.append("path")
 		.attr("d", path)
 		.attr("class", "country");
-
-	var country = codes[id].ccode;
 
 	var allies = {};
 		//console.log(data2.links);
