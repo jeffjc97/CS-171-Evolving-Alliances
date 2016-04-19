@@ -1,0 +1,69 @@
+path {
+    stroke: white;
+    stroke-width: .5px;
+}
+
+
+.tooltip-title {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.d3-tip {
+    position: absolute;
+    line-height: 1;
+    padding: 12px;
+    background: green;
+    color: #fff;
+    border-radius: 2px;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
+}
+
+.jumbotron {
+    padding-left: 2%;
+}
+
+#alliance-type-select {
+    margin-top: 10px;
+    width: 100%;
+}
+
+#timeline-buttons button {
+    width: 48%;
+}
+
+#slider {
+    padding-left: 2%;
+    padding-right: 2%;
+    margin-bottom: 2%;
+    width: 80%;
+}
+
+.introduction {
+    padding-left: 2%;
+    margin-bottom: 2%;
+    font-size: 16px;
+}
+
+#dataset-about {
+    margin-left: 2%;
+}
+
+.title-card {
+    margin-left: 2%;
+}
+
+#world-map-container {
+    margin: 0px;
+}
+
+.vis-explain {
+    font-style: italic;
+}

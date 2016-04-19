@@ -3,13 +3,9 @@ var width = 1000,
 
 var intervalID = -1;
 $('.animate-btn').click(function() {
-	$(this).prop('disabled', true);
-	$('.stop-btn').prop('disabled', false);
 	animateAlliances("start");
 });
 $('.stop-btn').click(function() {
-	$(this).prop('disabled', true);
-	$('.animate-btn').prop('disabled', false);
 	animateAlliances("end");
 });
 
@@ -72,6 +68,7 @@ queue()
 		codes = {};
 		data3.forEach(function(d){codes[d.id] = d});
 		country_id = 840;
+		animateAlliances("end");
 		updateVisualization();
 	});
 
@@ -79,21 +76,14 @@ function updateVisualization() {
 	world = topojson.feature(data1, data1.objects.countries).features;
 
 	year = d3.select("#year").property("value");
-	document.querySelector('#output').value = year;
-
+	$('.global-alliance-title').text('Global Alliances: ' + year);
 
 	alliance_type = +$('#alliance-type-select').find('.active').attr('atype');
-
-
-	console.log(year);
-
-	console.log(data1);
 
 	var tip = d3.tip()
 		.attr('class', 'd3-tip')
 		.html(function(d) {
 			var id = d.id;
-			console.log(id);
 			if(!(id in codes)){
 				return "No Data";
 			}
@@ -192,6 +182,8 @@ function updateVisualization() {
 
 function animateAlliances(type) {
 	if (type == "start" && intervalID == -1) {
+		$('.animate-btn').prop('disabled', true);
+		$('.stop-btn').prop('disabled', false);
 		curYear = 0;
 		intervalID = setInterval(function() {
 			$('#year').val(curYear + 1816);
@@ -201,6 +193,8 @@ function animateAlliances(type) {
 
 	}
 	else if (type == "end") {
+		$('.animate-btn').prop('disabled', false);
+		$('.stop-btn').prop('disabled', true);
 		if (intervalID != -1) {
 			clearInterval(intervalID);
 			intervalID = -1;
@@ -219,9 +213,12 @@ function move() {
 function updateCountry(id){
 
 	year = d3.select("#year").property("value");
-	document.querySelector('#output').value = year;
+	$('.global-alliance-title').text('Global Alliances: ' + year);
 
 	country = codes[id].ccode;
+	statename = codes[id].statenme;
+
+	$('.country-alliance-title').text("Country Alliances: " + statename);
 
 	countrySvg.selectAll("path")
 		.data(world)
@@ -277,7 +274,7 @@ function updateCountry(id){
 		.style("fill", function(d) { return d });
 
 	legend = g.selectAll("text")
-		.data(["selected country","defense","neutrality","nonaggression","entente","no data"])
+		.data(["Selected Country","Defense","Neutrality","Nonaggression","Entente","No Alliance"])
 		.enter().append("text")
 		.text(function(d){ return d; })
 		.attr("y", function(d,i) { return (i*16 + 15); })
