@@ -71,6 +71,7 @@ queue()
 
 		codes = {};
 		data3.forEach(function(d){codes[d.id] = d});
+		country_id = 840;
 		updateVisualization();
 	});
 
@@ -82,7 +83,6 @@ function updateVisualization() {
 
 
 	alliance_type = +$('#alliance-type-select').find('.active').attr('atype');
-
 
 	console.log(data1);
 
