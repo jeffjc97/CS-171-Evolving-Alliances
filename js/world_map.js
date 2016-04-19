@@ -38,7 +38,8 @@ var svg = d3.select("#world-map").append("svg")
 
 var countrySvg = d3.select("#country-view").append("svg")
 	.attr("width", width)
-	.attr("height", height);
+	.attr("height", height)
+	.style("margin-top", "5%");
 
 var world;
 
@@ -83,6 +84,9 @@ function updateVisualization() {
 
 
 	alliance_type = +$('#alliance-type-select').find('.active').attr('atype');
+
+
+	console.log(year);
 
 	console.log(data1);
 
