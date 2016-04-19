@@ -25,3 +25,21 @@ path {
     top: 100%;
     left: 0;
 }
+
+.jumbotron {
+    padding-left: 2%;
+}
+
+#alliance-type-select {
+    margin-top: 10px;
+    width: 100%;
+}
+
+#timeline-buttons button {
+    width: 48%;
+}
+
+#slider {
+    padding-left: 2%;
+    padding-right: 2%;
+}

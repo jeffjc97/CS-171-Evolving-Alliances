@@ -3,9 +3,13 @@ var width = 1000,
 
 var intervalID = -1;
 $('.animate-btn').click(function() {
+	$(this).prop('disabled', true);
+	$('.stop-btn').prop('disabled', false);
 	animateAlliances("start");
 });
 $('.stop-btn').click(function() {
+	$(this).prop('disabled', true);
+	$('.animate-btn').prop('disabled', false);
 	animateAlliances("end");
 });
 
@@ -25,6 +29,8 @@ var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", move);
 var svg = d3.select("#world-map").append("svg")
 	.attr("width", width)
 	.attr("height", height)
+	.style("display", "block")
+	.style("margin", "auto")
 	.append("g")
 		.call(zoom)
 	.append("g");
