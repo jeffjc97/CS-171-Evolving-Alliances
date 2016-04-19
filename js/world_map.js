@@ -263,4 +263,24 @@ function updateCountry(id){
 			}
 			return "gray"
 		});
+
+	var g = countrySvg.append("g")
+		.attr("class", "key")
+		.attr("transform", "translate(" + 100 + "," + (height-200) + ")");
+
+	g.selectAll("rect")
+		.data(["purple","red","green","blue","yellow","gray"])
+		.enter().append("rect")
+		.attr("height", 15)
+		.attr("y", function(d,i) { return i*16; })
+		.attr("width", 10)
+		.style("fill", function(d) { return d });
+
+	legend = g.selectAll("text")
+		.data(["selected country","defense","neutrality","nonaggression","entente","no data"])
+		.enter().append("text")
+		.text(function(d){ return d; })
+		.attr("y", function(d,i) { return (i*16 + 15); })
+		.attr("x", 13);
+
 };
