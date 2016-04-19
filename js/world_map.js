@@ -18,6 +18,8 @@ $('.alliance-type-btn').click(function() {
 	}
 });
 
+var year;
+
 var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", move);
 
 var svg = d3.select("#world-map").append("svg")
@@ -34,6 +36,9 @@ var countrySvg = d3.select("#country-view").append("svg")
 
 var world;
 
+var country_id;
+
+var codes;
 
 var nodesById;
 
@@ -58,10 +63,9 @@ queue()
 		nodesById = {};
 		data2.nodes.forEach(function(d){nodesById[d.id] = d});
 
-		mapidsToCodes = {}
-		data3.forEach(function(d){mapidsToCodes[d.id] = d})
+		codes = {};
+		data3.forEach(function(d){codes[d.id] = d});
 		updateVisualization();
-		updateCountry();
 	});
 
 function updateVisualization() {
@@ -79,12 +83,13 @@ function updateVisualization() {
 		.attr('class', 'd3-tip')
 		.html(function(d) {
 			var id = d.id;
-			if(!(id in mapidsToCodes)){
+			console.log(id);
+			if(!(id in codes)){
 				return "No Data";
 			}
 
 			else {
-				return mapidsToCodes[id].statenme;
+				return codes[id].statenme;
 			}
 		});
 
@@ -104,7 +109,11 @@ function updateVisualization() {
 				.style("top", (d3.event.pageY - 40) + "px")
 				.style("left", (d3.event.pageX) + "px");
 		})
-		.on('mouseout',tip.hide);
+		.on('mouseout',tip.hide)
+		.on("click", function(d) {
+			country_id = d.id;
+			updateCountry(country_id);
+		});
 
 	svg.selectAll("circle")
 		.data(data2.nodes)
@@ -166,6 +175,9 @@ function updateVisualization() {
 		});
 
 	line.exit().remove();
+
+	updateCountry(country_id);
+
 }
 
 function animateAlliances(type) {
@@ -194,16 +206,51 @@ function move() {
 		.attr("stroke-width", 1/d3.event.scale);
 }
 
-function updateCountry(){
-
-	var	codes;
+function updateCountry(id){
 
 	year = d3.select("#year").property("value");
-	console.log(year);
+	document.querySelector('#output').value = year;
+
+	country = codes[id].ccode;
 
 	countrySvg.selectAll("path")
 		.data(world)
 		.enter()
 		.append("path")
-		.attr("d", path);
-	};
+		.attr("d", path)
+		.attr("class", "country");
+
+	var allies = {};
+		//console.log(data2.links);
+	data2.links[year].forEach(function(d){
+		if (d.source == country){
+			allies[d.target] = d.alliance_type;
+		} else if (d.target == country){
+			allies[d.source] = d.alliance_type;
+		}
+	});
+	//console.log(allies);
+
+	d3.selectAll(".country")
+		.style("fill", function(d) {
+			//console.log(d.id);
+			//console.log(codes[d.id]);
+			if (d.id == id){
+				return "purple"
+			} else if (d.id in codes){
+				var code = codes[d.id].ccode;
+				if (isNaN(code) || !(code in allies) ){
+					return "gray"
+				} else if (allies[code][0] == 1){
+					return "red"
+				} else if (allies[code][1] == 1){
+					return "green"
+				} else if (allies[code][2] == 1){
+					return "blue";
+				} else if (allies[code][3] == 1){
+					return "yellow";
+				}
+			}
+			return "gray"
+		});
+};
