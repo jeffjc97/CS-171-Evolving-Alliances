@@ -23,20 +23,20 @@
 	<h1 class="title-card global-alliance-title">Global Alliances</h1>
 	<div id="slider">
 		<!-- <label for="slider">Year</label> -->
-		<div class="vis-explain">Drag the slider to see alliances for different years, or click play to start the animation</div>
-		<input type="range" min="1816" max="2012" value="1970" id="year" step="1" oninput="updateVisualization()">
+		<!-- <div class="vis-explain">Drag the slider to see alliances for different years, or click play to start the animation</div> -->
+		<!-- <input type="range" min="1816" max="2012" value="1970" id="year" step="1" oninput="updateVisualization()"> -->
 	</div>
 	<div id="world-map-container" class="row">
 		<div id="world-map" class="col-md-10"></div>
 		<div id="world-map-buttons" class="col-md-2">
-			<div id="timeline-buttons">
+			<!-- <div id="timeline-buttons">
 				<button type="button" class="animate-btn btn btn-primary">
 					<i class="fa fa-play fa-fw"></i>
 				</button>
 				<button type="button" disabled="true" class="stop-btn btn btn-primary">
 					<i class="fa fa-pause fa-fw"></i>
 				</button>
-			</div>
+			</div> -->
 			<div id="alliance-type-select" class="btn-group-vertical">
 				<button type="button" atype="4" class="alliance-type-btn active btn btn-primary">All</button>
 			 	<button type="button" atype="0" class="alliance-type-btn btn btn-primary">Defense</button>
@@ -56,15 +56,24 @@
 		<div id="country-view"></div>
 	</div>
 
-	<div id="dataset-about">
-		<h3>About the Dataset</h3>
-		<p>
-			We plan to use data made available through the Correlates of War project (http://www.correlatesofwar.org).
-			Specifically, we will focus on the “Formal Alliances” dataset which includes data on alliances and neutrality
-			agreements between countries around the world, organized by country-dyad and year. This data could potentially
-			be supplemented with data on membership in international organizations, or military conflicts (also available
-			from Correlates of War).
-		</p>
+	<div id="map-footer">
+		<div id="map-footer-container" class="row">
+			<div class="timeline-info-container col-md-2">
+				<div class="timeline-year">Year: 1970</div>
+				<div id="timeline-buttons">
+					<button type="button" class="animate-btn btn btn-primary">
+						<i class="fa fa-play fa-fw"></i>
+					</button>
+					<button type="button" disabled="true" class="stop-btn btn btn-primary">
+						<i class="fa fa-pause fa-fw"></i>
+					</button>
+				</div>
+			</div>
+			<div class="timeline-container col-md-10">
+				<div class="vis-explain">Drag the slider to see alliances for different years, or click play to start the animation</div>
+				<input type="range" min="1816" max="2012" value="1970" id="year" step="1" oninput="updateVisualization()">
+			</div>
+		</div>
 	</div>
 
 	<script src="assets/js/jquery.min.js"></script>

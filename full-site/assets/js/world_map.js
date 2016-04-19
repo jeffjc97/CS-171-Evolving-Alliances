@@ -34,7 +34,8 @@ var svg = d3.select("#world-map").append("svg")
 
 var countrySvg = d3.select("#country-view").append("svg")
 	.attr("width", width)
-	.attr("height", height);
+	.attr("height", height)
+	.style("margin-bottom", "4%");
 	
 var world;
 
@@ -76,7 +77,7 @@ function updateVisualization() {
 	world = topojson.feature(data1, data1.objects.countries).features;
 
 	year = d3.select("#year").property("value");
-	$('.global-alliance-title').text('Global Alliances: ' + year);
+	$('.timeline-year').text('Year: ' + year);
 
 	alliance_type = +$('#alliance-type-select').find('.active').attr('atype');
 
@@ -103,16 +104,26 @@ function updateVisualization() {
 		.append("path")
 		.attr("d", path)
 		.on('mouseover',tip.show)
-		.on("mousemove", function () {
-			//console.log(d3.event);
+		.on("mousemove", function (d) {
+			var currentState = this;
+            d3.select(this)
+            	.style("fill", "red")
+            	.style("cursor", "pointer");
 			return tip
 				.style("top", (d3.event.pageY - 40) + "px")
 				.style("left", (d3.event.pageX) + "px");
 		})
-		.on('mouseout',tip.hide)
+		.on('mouseout', function (d) {
+			var currentState = this;
+            d3.select(this).style("fill", "black");
+            tip.hide();
+		})
 		.on("click", function(d) {
 			country_id = d.id;
 			updateCountry(country_id);
+			$('html, body').animate({
+				scrollTop: $('.country-alliance-title').offset().top
+			}, 500);
 		});
 
 	svg.selectAll("circle")
@@ -213,7 +224,7 @@ function move() {
 function updateCountry(id){
 
 	year = d3.select("#year").property("value");
-	$('.global-alliance-title').text('Global Alliances: ' + year);
+	$('.timeline-year').text('Year: ' + year);
 
 	country = codes[id].ccode;
 	statename = codes[id].statenme;

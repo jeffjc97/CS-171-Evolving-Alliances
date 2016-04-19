@@ -37,6 +37,7 @@ path {
 
 #timeline-buttons button {
     width: 48%;
+    /*opacity: 1;*/
 }
 
 #slider {
@@ -66,4 +67,27 @@ path {
 
 .vis-explain {
     font-style: italic;
+    font-size: 12px;
+}
+
+#map-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 10%;
+    opacity: 0.9;
+    background-color: azure;
+}
+
+#map-footer-container {
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+.timeline-year {
+    font-size: 18px;
+}
+
+.timeline-container {
+    padding-top: 1.5%;
 }
