@@ -65,6 +65,7 @@ queue()
 
 		codes = {};
 		data3.forEach(function(d){codes[d.id] = d});
+		country_id = 840;
 		updateVisualization();
 	});
 
@@ -79,6 +80,9 @@ function updateVisualization() {
 
 
 	console.log(year);
+
+	console.log(data1);
+
 	var tip = d3.tip()
 		.attr('class', 'd3-tip')
 		.html(function(d) {
