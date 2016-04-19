@@ -277,7 +277,7 @@ function updateCountry(id){
 		.style("fill", function(d) { return d });
 
 	legend = g.selectAll("text")
-		.data(["selected country","defense","neutrality","nonaggression","entente","no data"])
+		.data(["selected country","defense","neutrality","nonaggression","entente","no alliance"])
 		.enter().append("text")
 		.text(function(d){ return d; })
 		.attr("y", function(d,i) { return (i*16 + 15); })
