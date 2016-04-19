@@ -35,7 +35,8 @@ var svg = d3.select("#world-map").append("svg")
 var countrySvg = d3.select("#country-view").append("svg")
 	.attr("width", width)
 	.attr("height", height)
-	.style("margin-bottom", "4%");
+	.style("display", "block")
+	.style("margin", "auto")
 	
 var world;
 

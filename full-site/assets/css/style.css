@@ -91,3 +91,9 @@ path {
 .timeline-container {
     padding-top: 1.5%;
 }
+
+#country-view-container {
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 4%;
+}
