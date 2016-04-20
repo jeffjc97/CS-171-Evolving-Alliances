@@ -2,6 +2,10 @@
     fill: #33CC33;
 }
 
+.water {
+    fill: #92dfff;
+}
+
 path {
     stroke: white;
     stroke-width: .5px;
