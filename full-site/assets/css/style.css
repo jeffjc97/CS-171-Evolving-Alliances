@@ -41,6 +41,11 @@ path {
     /*opacity: 1;*/
 }
 
+#timeline-buttons button:hover {
+    background-color: #158475;
+    border-color: #158475;
+}
+
 #slider {
     padding-left: 2%;
     padding-right: 2%;
@@ -114,5 +119,5 @@ path {
 }
 
 .alliance-type-btn.active:hover {
-    background-color: #6dc596;
+    background-color: #a4dbbd;
 }
