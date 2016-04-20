@@ -1,5 +1,6 @@
 var width = 1000,
-	height = 600;
+	height = 600,
+	center = [width / 2, height / 2];
 
 var intervalID = -1;
 $('.animate-btn').click(function() {
@@ -26,11 +27,11 @@ var svg = d3.select("#world-map").append("svg")
 	.attr("width", width)
 	.attr("height", height)
 	.style("display", "block")
-	.style("margin", "auto")
-	.append("g")
-		.call(zoom)
-	.append("g");
+	.style("margin", "auto");
 
+var g = svg.append("g");
+
+svg.call(zoom);
 
 var countrySvg = d3.select("#country-view").append("svg")
 	.attr("width", width)
@@ -48,9 +49,6 @@ var nodesById;
 
 var projection = d3.geo.mercator()
 					.translate([width/2, height/2]);
-
-// var projection = d3.geo.azimuthalEqualArea()
-// 					.translate([width/2, height/2]);
 
 var path = d3.geo.path().projection(projection);
 
@@ -98,8 +96,7 @@ function updateVisualization() {
 	svg.call(tip);
 
 
-	svg
-		.selectAll("path")
+	g.selectAll("path")
 		.data(world)
 		.enter()
 		.append("path")
@@ -128,7 +125,7 @@ function updateVisualization() {
 			}, 500);
 		});
 
-	svg.selectAll("circle")
+	g.selectAll("circle")
 		.data(data2.nodes)
 		.enter()
 		.append("circle")
@@ -147,7 +144,7 @@ function updateVisualization() {
 		});
 	}
 
-	var line = svg.selectAll("line")
+	var line = g.selectAll("line")
 		.data(linkdata);
 
 	line
@@ -216,12 +213,43 @@ function animateAlliances(type) {
 }
 
 function move() {
-	svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-	svg.selectAll("circle")
-		.attr("r", 3 / d3.event.scale);
-	svg.selectAll("line")
-		.attr("stroke-width", 1/d3.event.scale);
+	g.attr("transform", "translate(" + zoom.translate() + ")scale(" + zoom.scale() + ")");
+	g.selectAll("circle")
+		.attr("r", 3 / zoom.scale());
+	g.selectAll("line")
+		.attr("stroke-width", 1/zoom.scale());
 }
+
+d3.selectAll('.zoom').on('click', function(){
+	d3.event.preventDefault();
+	var scale = zoom.scale(),
+		extent = zoom.scaleExtent(),
+		translate = zoom.translate(),
+		x = translate[0], y = translate[1],
+		factor = (this.id === 'zoom_in') ? 1.2 : 1/1.2,
+		target_scale = scale * factor;
+	// If we're already at an extent, done
+	if (target_scale === extent[0] || target_scale === extent[1]) { return false; }
+	// If the factor is too much, scale it down to reach the extent exactly
+	var clamped_target_scale = Math.max(extent[0], Math.min(extent[1], target_scale));
+	if (clamped_target_scale != target_scale){
+		target_scale = clamped_target_scale;
+		factor = target_scale / scale;
+	}
+	// Center each vector, stretch, then put back
+	x = (x - center[0]) * factor + center[0];
+	y = (y - center[1]) * factor + center[1];
+	// Transition to the new view over 350ms
+	d3.transition().duration(350).tween("zoom", function () {
+		var interpolate_scale = d3.interpolate(scale, target_scale),
+			interpolate_trans = d3.interpolate(translate, [x,y]);
+		return function (t) {
+			zoom.scale(interpolate_scale(t))
+				.translate(interpolate_trans(t));
+			move();
+		};
+	});
+});
 
 function updateCountry(id){
 
@@ -261,13 +289,13 @@ function updateCountry(id){
 				if (isNaN(code) || !(code in allies) ){
 					return "gray"
 				} else if (allies[code][0] == 1){
-					return "#8856a7"
+					return "#810f7c"
 				} else if (allies[code][1] == 1){
-					return "#8c96c6"
+					return "#8856a7"
 				} else if (allies[code][2] == 1){
-					return "#9ebcda";
+					return "#8c96c6";
 				} else if (allies[code][3] == 1){
-					return "#bfd3e6";
+					return "#b3cde3";
 				}
 			}
 			return "gray"
@@ -278,7 +306,7 @@ function updateCountry(id){
 		.attr("transform", "translate(" + 100 + "," + (height-200) + ")");
 
 	g.selectAll("rect")
-		.data(["#126e61","#8856a7","#8c96c6","#9ebcda","#bfd3e6","gray"])
+		.data(["#126e61","#810f7c","#8856a7","#8c96c6","#b3cde3","gray"])
 		.enter().append("rect")
 		.attr("height", 15)
 		.attr("y", function(d,i) { return i*16; })
