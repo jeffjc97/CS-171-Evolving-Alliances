@@ -139,6 +139,7 @@ function updateVisualization() {
 				projection.rotate([d3.event.x * sens, -d3.event.y * sens, rotate[2]]);
 				svg.selectAll(".moveable").attr("d", path);
 				svg.selectAll(".focused").classed("focused", focused = false);
+				svg.selectAll("circle");
 			}));
 
 	//Country focus on option select
@@ -194,10 +195,8 @@ function updateVisualization() {
 
 	var line = svg.selectAll("line")
 		.data(linkdata)
-		.attr("class","moveable")
-		.call(d3.behavior.drag()
-			.origin(function() { var r = projection.rotate(); return {x: r[0] / sens, y: -r[1] / sens}; }));
-
+		.attr("class","moveable");
+	
 	line
 		.enter()
 		.append("line")

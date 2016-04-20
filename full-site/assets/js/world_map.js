@@ -22,6 +22,7 @@ var year;
 
 var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", move);
 
+
 var svg = d3.select("#world-map").append("svg")
 	.attr("width", width)
 	.attr("height", height)
@@ -46,11 +47,14 @@ var codes;
 
 var nodesById;
 
-var projection = d3.geo.mercator()
-					.translate([width/2, height/2]);
+//var projection = d3.geo.mercator()
+//					.translate([width/2, height/2]);
 
-// var projection = d3.geo.azimuthalEqualArea()
-// 					.translate([width/2, height/2]);
+ var projection = d3.geo.orthographic()
+	 .scale(250)
+	 .rotate([0,0])
+	 .translate([width/2, height/2])
+	 .clipAngle(90);
 
 var path = d3.geo.path().projection(projection);
 
