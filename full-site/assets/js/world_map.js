@@ -104,11 +104,12 @@ function updateVisualization() {
 		.enter()
 		.append("path")
 		.attr("d", path)
+		.style("fill", "#126e61")
 		.on('mouseover',tip.show)
 		.on("mousemove", function (d) {
 			var currentState = this;
             d3.select(this)
-            	.style("fill", "red")
+            	.style("fill", "#4EB980")
             	.style("cursor", "pointer");
 			return tip
 				.style("top", (d3.event.pageY - 40) + "px")
@@ -116,7 +117,7 @@ function updateVisualization() {
 		})
 		.on('mouseout', function (d) {
 			var currentState = this;
-            d3.select(this).style("fill", "black");
+            d3.select(this).style("fill", "#126e61");
             tip.hide();
 		})
 		.on("click", function(d) {
@@ -134,7 +135,7 @@ function updateVisualization() {
 		.attr("r", 3)
 		.attr("cx", 0)
 		.attr("cy", 0)
-		.style("fill", "red")
+		.style("fill", "#b6c6e2")
 		.attr("transform", function(d) {
 			return "translate(" + projection([d.longitude, d.latitude]) + ")";
 		});
@@ -152,7 +153,7 @@ function updateVisualization() {
 	line
 		.enter()
 		.append("line")
-		.style("stroke", "red")
+		.style("stroke", "#a4dbbd")
 		.attr("x1", function(d) {
 			var id = d.source;
 			if (id in nodesById){
@@ -248,26 +249,25 @@ function updateCountry(id){
 			allies[d.source] = d.alliance_type;
 		}
 	});
-	//console.log(allies);
 
 	d3.selectAll(".country")
 		.style("fill", function(d) {
 			//console.log(d.id);
 			//console.log(codes[d.id]);
 			if (d.id == id){
-				return "purple"
+				return "#126e61"
 			} else if (d.id in codes){
 				var code = codes[d.id].ccode;
 				if (isNaN(code) || !(code in allies) ){
 					return "gray"
 				} else if (allies[code][0] == 1){
-					return "red"
+					return "#8856a7"
 				} else if (allies[code][1] == 1){
-					return "green"
+					return "#8c96c6"
 				} else if (allies[code][2] == 1){
-					return "blue";
+					return "#9ebcda";
 				} else if (allies[code][3] == 1){
-					return "yellow";
+					return "#bfd3e6";
 				}
 			}
 			return "gray"
@@ -278,7 +278,7 @@ function updateCountry(id){
 		.attr("transform", "translate(" + 100 + "," + (height-200) + ")");
 
 	g.selectAll("rect")
-		.data(["purple","red","green","blue","yellow","gray"])
+		.data(["#126e61","#8856a7","#8c96c6","#9ebcda","#bfd3e6","gray"])
 		.enter().append("rect")
 		.attr("height", 15)
 		.attr("y", function(d,i) { return i*16; })

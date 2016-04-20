@@ -131,13 +131,6 @@ function updateVisualization() {
 				svg.selectAll(".moveable").attr("d", path);
 			}));
 
-	//Country focus on option select
-
-	d3.select("select").on("change", function() {
-		var rotate = projection.rotate(),
-			focusedCountry = country(countries, this),
-			p = d3.geo.centroid(focusedCountry);
-
 		//Globe rotating
 
 		(function transition() {
