@@ -1,5 +1,8 @@
 var width = 1000,
 	height = 600;
+	sens = 0.25;
+
+var focused;
 
 var intervalID = -1;
 $('.animate-btn').click(function() {
@@ -20,23 +23,23 @@ $('.alliance-type-btn').click(function() {
 
 var year;
 
-var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", move);
+//var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", move);
 
 var svg = d3.select("#world-map").append("svg")
 	.attr("width", width)
 	.attr("height", height)
 	.style("display", "block")
 	.style("margin", "auto")
-	.append("g")
-		.call(zoom)
-	.append("g");
+	//.append("g")
+	//	.call(zoom)
+	//.append("g");
 
 
 var countrySvg = d3.select("#country-view").append("svg")
 	.attr("width", width)
 	.attr("height", height);
 	
-var world;
+var countries;
 
 var country_id;
 
@@ -44,13 +47,22 @@ var codes;
 
 var nodesById;
 
-var projection = d3.geo.mercator()
-					.translate([width/2, height/2]);
+//var projection = d3.geo.mercator()
+//					.translate([width/2, height/2]);
 
-// var projection = d3.geo.azimuthalEqualArea()
-// 					.translate([width/2, height/2]);
+var projection = d3.geo.orthographic()
+	.scale(245)
+	.rotate([0, 0])
+	.translate([width / 2, height / 2])
+	.clipAngle(90);
 
 var path = d3.geo.path().projection(projection);
+
+//water
+svg.append("path")
+	.datum({type: "Sphere"})
+	.attr("class", "water")
+	.attr("d", path);
 
 // Load data parallel
 queue()
@@ -73,7 +85,7 @@ queue()
 	});
 
 function updateVisualization() {
-	world = topojson.feature(data1, data1.objects.countries).features;
+	countries = topojson.feature(data1, data1.objects.countries).features;
 
 	year = d3.select("#year").property("value");
 	$('.global-alliance-title').text('Global Alliances: ' + year);
@@ -96,12 +108,15 @@ function updateVisualization() {
 	svg.call(tip);
 
 
-	svg
-		.selectAll("path")
-		.data(world)
-		.enter()
-		.append("path")
+	var world = svg.selectAll("path")
+		.data(countries)
+		.enter().append("path")
+		.attr("class", "land")
+		.attr("class","moveable")
 		.attr("d", path)
+
+		//mouse events
+
 		.on('mouseover',tip.show)
 		.on("mousemove", function () {
 			//console.log(d3.event);
@@ -113,12 +128,55 @@ function updateVisualization() {
 		.on("click", function(d) {
 			country_id = d.id;
 			updateCountry(country_id);
-		});
+		})
+
+		//Drag event
+
+		.call(d3.behavior.drag()
+			.origin(function() { var r = projection.rotate(); return {x: r[0] / sens, y: -r[1] / sens}; })
+			.on("drag", function() {
+				var rotate = projection.rotate();
+				projection.rotate([d3.event.x * sens, -d3.event.y * sens, rotate[2]]);
+				svg.selectAll(".moveable").attr("d", path);
+				svg.selectAll(".focused").classed("focused", focused = false);
+			}));
+
+	//Country focus on option select
+
+	d3.select("select").on("change", function() {
+		var rotate = projection.rotate(),
+			focusedCountry = country(countries, this),
+			p = d3.geo.centroid(focusedCountry);
+
+		svg.selectAll(".focused").classed("focused", focused = false);
+
+		//Globe rotating
+
+		(function transition() {
+			d3.transition()
+				.duration(2500)
+				.tween("rotate", function() {
+					var r = d3.interpolate(projection.rotate(), [-p[0], -p[1]]);
+					return function(t) {
+						projection.rotate(r(t));
+						svg.selectAll("path").attr("d", path)
+							.classed("focused", function(d, i) { return d.id == focusedCountry.id ? focused = d : false; });
+					};
+				})
+		})();
+	});
+
+	function country(cnt, sel) {
+		for(var i = 0, l = cnt.length; i < l; i++) {
+			if(cnt[i].id == sel.value) {return cnt[i];}
+		}
+	}
 
 	svg.selectAll("circle")
 		.data(data2.nodes)
 		.enter()
 		.append("circle")
+		.attr("class","moveable")
 		.attr("r", 3)
 		.attr("cx", 0)
 		.attr("cy", 0)
@@ -135,7 +193,10 @@ function updateVisualization() {
 	}
 
 	var line = svg.selectAll("line")
-		.data(linkdata);
+		.data(linkdata)
+		.attr("class","moveable")
+		.call(d3.behavior.drag()
+			.origin(function() { var r = projection.rotate(); return {x: r[0] / sens, y: -r[1] / sens}; }));
 
 	line
 		.enter()
@@ -202,13 +263,13 @@ function animateAlliances(type) {
 	}
 }
 
-function move() {
-	svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-	svg.selectAll("circle")
-		.attr("r", 3 / d3.event.scale);
-	svg.selectAll("line")
-		.attr("stroke-width", 1/d3.event.scale);
-}
+//function move() {
+//	svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+//	svg.selectAll("circle")
+//		.attr("r", 3 / d3.event.scale);
+//	svg.selectAll("line")
+//		.attr("stroke-width", 1/d3.event.scale);
+//}
 
 function updateCountry(id){
 
@@ -221,7 +282,7 @@ function updateCountry(id){
 	$('.country-alliance-title').text("Country Alliances: " + statename);
 
 	countrySvg.selectAll("path")
-		.data(world)
+		.data(countries)
 		.enter()
 		.append("path")
 		.attr("d", path)
