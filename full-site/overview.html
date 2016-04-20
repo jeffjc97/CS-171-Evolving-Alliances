@@ -9,12 +9,67 @@
 	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>
+<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="index.html">Evolving Alliances</a>
+		</div>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li><a href="overview.html">Overview</a></li>
+				<li class="active"><a href="map.html">Map<span class="sr-only">(current)</span></a></li>
+				<li><a href="correlates.html">About the Data</a></li>
+			</ul>
+		</div>
+	</div>
   	<div class="jumbotron">
 		<h1>Project Overview</h1> 
-		<p>Description sdfdsdsf</p> 
+		<p>
+			The inspiration and goal.
+		</p>
   	</div>
 	<div id="dataset-about">
-			blah blah
+		<h3>Background and Motivation</h3>
+			<p>
+					Large datasets on international relations are relatively rare, especially in writing for general audiences,
+				rather than academic papers. Therefore, we thought it would be interesting to create an accessible way to engage
+				with some of the existing quantitative IR data.
+			</p>
+			<p>
+					In particular, one group member has an academic background and research interests in international relations
+				and security, and used some of the Correlates of War data in their senior thesis. This led to an interest in
+				creating an intuitive way to visually explore the data, rather than browsing through an enormous spreadsheet,
+				or looking for particular relationships or effects with a statistics package.
+			</p>
+		<p>
+			The core of our idea (overlaying a network of links on a map) came from this class’ Lab 6 on visualizing
+			airport connections. Additionally, the front page of the Correlates of War Project (http://www.correlatesofwar.org/)
+			shows several map visualizations of some of their data, although these maps are not interactive, which limits the scope of the data they can show.
+			We were also inspired by animated map visualizations that display data over time, such as the following:
+			https://www.washingtonpost.com/graphics/world/islamic-state-attacks/. Recently, this type of visualization has
+			been appearing fairly frequently in newspapers such as the Washington Post and the New York Times.
+
+		</p>
+		<h3>
+			Objectives and Goals
+		</h3>
+		<p>
+			Through this project, we hope to provide a straightforward, engaging means for people to interact with information
+			on international relations. Specifically, our project will allow users to explore how relationships between
+			different countries have changed over time - which countries have been allied, when, and for how long? Ideally,
+			this will give users with an entry point into the world of quantitative data on international relations (a relatively new trend),
+			and allow for intuitive exploration of data that might otherwise seem overwhelming, given its global scale and large time range.
+
+		</p>
 	</div>
 
 	<script src="assets/js/jquery.min.js"></script>

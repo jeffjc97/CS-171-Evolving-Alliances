@@ -129,6 +129,14 @@ function updateVisualization() {
 				var rotate = projection.rotate();
 				projection.rotate([d3.event.x * sens, -d3.event.y * sens, rotate[2]]);
 				svg.selectAll(".moveable").attr("d", path);
+<<<<<<< HEAD
+=======
+				svg.selectAll(".focused").classed("focused", focused = false);
+
+
+				// svg.selectAll(".focused").classed("focused", focused = false);
+
+>>>>>>> 9751d30b54c895ebef9f9a80b2cd8b59a733422a
 			}));
 
 		//Globe rotating
@@ -173,8 +181,14 @@ function updateVisualization() {
 	}
 
 	var line = svg.selectAll("line")
+<<<<<<< HEAD
 		.data(linkdata);
 
+=======
+		.data(linkdata)
+		.attr("class","moveable");
+	
+>>>>>>> 9751d30b54c895ebef9f9a80b2cd8b59a733422a
 	line
 		.enter()
 		.append("line")

@@ -23,6 +23,7 @@ var year;
 
 var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", move);
 
+
 var svg = d3.select("#world-map").append("svg")
 	.attr("width", width)
 	.attr("height", height)
@@ -48,7 +49,7 @@ var codes;
 var nodesById;
 
 var projection = d3.geo.mercator()
-					.translate([width/2, height/2]);
+	.translate([width/2, height/2]);
 
 var path = d3.geo.path().projection(projection);
 
