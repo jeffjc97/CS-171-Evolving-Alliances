@@ -139,33 +139,13 @@ function updateVisualization() {
 				projection.rotate([d3.event.x * sens, -d3.event.y * sens, rotate[2]]);
 				svg.selectAll(".moveable").attr("d", path);
 				svg.selectAll(".focused").classed("focused", focused = false);
-				svg.selectAll("circle");
+
+
+				// svg.selectAll(".focused").classed("focused", focused = false);
+
 			}));
 
 	//Country focus on option select
-
-	d3.select("select").on("change", function() {
-		var rotate = projection.rotate(),
-			focusedCountry = country(countries, this),
-			p = d3.geo.centroid(focusedCountry);
-
-		svg.selectAll(".focused").classed("focused", focused = false);
-
-		//Globe rotating
-
-		(function transition() {
-			d3.transition()
-				.duration(2500)
-				.tween("rotate", function() {
-					var r = d3.interpolate(projection.rotate(), [-p[0], -p[1]]);
-					return function(t) {
-						projection.rotate(r(t));
-						svg.selectAll("path").attr("d", path)
-							.classed("focused", function(d, i) { return d.id == focusedCountry.id ? focused = d : false; });
-					};
-				})
-		})();
-	});
 
 	function country(cnt, sel) {
 		for(var i = 0, l = cnt.length; i < l; i++) {
