@@ -22,6 +22,28 @@ $('.alliance-type-btn').click(function() {
 	}
 });
 
+$('#map-footer-expand').click(function() {
+	if ($(this).hasClass("open")) {
+		$(this).css("padding-left", "1%");
+		$('#map-footer').css("height", 0);
+		$(this).css("bottom", 0);
+		$("#footer-label").text("Change Year");
+		$(".map-footer-icon").removeClass("fa-chevron-down");
+		$(".map-footer-icon").addClass("fa-chevron-up");
+	}
+	else {
+		$('#map-footer').css("height", "10%");
+		$(this).css("bottom", "10%");
+		$(this).css("padding-left", "0%");
+		$("#footer-label").text("");
+		$(".map-footer-icon").removeClass("fa-chevron-up");
+		$(".map-footer-icon").addClass("fa-chevron-down");
+	}
+	$(this).toggleClass("open");
+	// $("#map-footer").css("height", '10%');
+	// $(this).hide();
+});
+
 var year;
 
 var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", move);
