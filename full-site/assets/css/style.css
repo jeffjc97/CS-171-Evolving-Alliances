@@ -84,6 +84,7 @@ path {
     opacity: 0.9;
     /*background-color: azure;*/
     background-color: #a4dbbd;
+    z-index: 10;
 }
 
 #map-footer-container {
