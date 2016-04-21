@@ -1,3 +1,6 @@
+// alliances highlight if hover over country
+// clicking dragging still scrolls down
+
 var width = 1000,
 	height = 600,
 	center = [width / 2, height / 2];
@@ -202,16 +205,17 @@ function updateVisualization() {
 
 }
 
-function updateForce(nodes, links) {
-	console.log("START NODES AND LINKS");
-	console.log(nodes);
-	console.log(links);
+function updateForce(n, l) {
+	nodes = JSON.parse(JSON.stringify(n));
+	links = JSON.parse(JSON.stringify(l));
 
 	involvedCountries = [];
 	links.forEach(function(l) {
 		involvedCountries.push(l.source);
 		involvedCountries.push(l.target);
 	});
+	involvedCountriesSet = new Set(involvedCountries);
+	involvedCountries = Array.from(involvedCountriesSet);
 
 	nodes = nodes.filter(function(n) {
 		if (involvedCountries.indexOf(n.id) > -1) {
@@ -244,15 +248,12 @@ function updateForce(nodes, links) {
 		d.target = idIndices.indexOf(+d.target);
 	});
 
-	console.log("LINKS:");
-	console.log(links);
-
 	force
-		.gravity(0.05)
+		.gravity(0.01)
 		.nodes(nodes)
 		.links(links)
-		.linkDistance(20)
-		// .linkDistance(function(d) { return getDistance(d.alliance_type); })
+		// .linkDistance(30)
+		.linkDistance(function(d) { return 2 * getDistance(d.alliance_type); })
 		.start();
 
 	var link = forceSvg.selectAll("line")
@@ -419,5 +420,21 @@ function updateCountry(id){
 };
 
 function getDistance(arr) {
-	return 4 * +arr[0] + 3 * +arr[1] + 2 * +arr[2] + +arr[3];
+	if (arr[0] == 1) {
+		return 30;
+	}
+	else if (arr[1] == 1) {
+		return 50;
+	}
+	else if (arr[2] == 1) {
+		return 70;
+	}
+	else if (arr[3] == 1) {
+		return 100;
+	}
+	// should never happen
+	else {
+		console.log("wtf");
+		return 1000;
+	}
 }
