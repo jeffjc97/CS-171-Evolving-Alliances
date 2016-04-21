@@ -61,7 +61,7 @@ var codes;
 var nodesById;
 
 var projection = d3.geo.mercator()
-	.translate([width/2, height/2]);
+	.translate(center);
 
 var path = d3.geo.path().projection(projection);
 
@@ -311,11 +311,14 @@ function animateAlliances(type) {
 }
 
 function move() {
-	g.attr("transform", "translate(" + zoom.translate() + ")scale(" + zoom.scale() + ")");
-	g.selectAll("circle")
-		.attr("r", 3 / zoom.scale());
-	g.selectAll("line")
-		.attr("stroke-width", 1/zoom.scale());
+
+	var t = d3.event.translate,
+		s = d3.event.scale;
+	t[0] = Math.min(0 * (s - 1), Math.max(width * (1 - s), t[0]));
+	t[1] = Math.min(height / 2 * (s - 1) + 230 * s, Math.max(height / 2 * (1 - s) - 230 * s, t[1]));
+	zoom.translate(t);
+	g.style("stroke-width", 1 / s).attr("transform", "translate(" + t + ")scale(" + s + ")");
+	g.selectAll("circle").attr("r", 3 / s);
 }
 
 d3.selectAll('.zoom').on('click', function(){
@@ -344,7 +347,9 @@ d3.selectAll('.zoom').on('click', function(){
 		return function (t) {
 			zoom.scale(interpolate_scale(t))
 				.translate(interpolate_trans(t));
-			move();
+			g.attr("transform", "translate(" + zoom.translate() + ")scale(" + zoom.scale() + ")");
+			g.selectAll("circle").attr("r", 3 / zoom.scale());
+			g.selectAll("line").attr("stroke-width", 1/zoom.scale());
 		};
 	});
 });
@@ -396,6 +401,10 @@ function updateCountry(id){
 				}
 			}
 			return "gray"
+		})
+		.on("click", function(d) {
+			country_id = d.id;
+			updateCountry(country_id);
 		});
 
 	var g = countrySvg.append("g")

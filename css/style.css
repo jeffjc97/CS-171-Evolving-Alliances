@@ -56,12 +56,14 @@ path {
 
 .introduction {
     padding-left: 2%;
+    padding-right:2%;
     margin-bottom: 2%;
     font-size: 16px;
 }
 
 #dataset-about {
     margin-left: 2%;
+    margin-right: 2%;
 }
 
 .title-card {
