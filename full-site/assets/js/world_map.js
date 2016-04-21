@@ -400,6 +400,10 @@ function updateCountry(id){
 				}
 			}
 			return "gray"
+		})
+		.on("click", function(d) {
+			country_id = d.id;
+			updateCountry(country_id);
 		});
 
 	var g = countrySvg.append("g")
