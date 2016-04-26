@@ -85,6 +85,9 @@ path {
     /*background-color: azure;*/
     background-color: #a4dbbd;
     z-index: 10;
+    -webkit-transition: height 0.5s;
+    -moz-transition: height 0.5s;
+    transition: height 0.5s;
 }
 
 #map-footer-container {
@@ -103,7 +106,6 @@ path {
 #country-view-container {
     margin-left: 0px;
     margin-right: 0px;
-    margin-bottom: 4%;
 }
 
 .alliance-type-btn {
@@ -121,4 +123,41 @@ path {
 
 .alliance-type-btn.active:hover {
     background-color: #a4dbbd;
+}
+
+#map-footer-expand {
+    z-index: 10;
+    right: 0;
+    /*display: none;*/
+    position: fixed;
+    bottom: 10%;
+    /*width: 5%;*/
+    opacity: 0.9;
+    background-color: #a4dbbd;
+    -webkit-transition: bottom 0.5s;
+    -moz-transition: bottom 0.5s;
+    transition: bottom 0.5s;
+    border-radius: 3px 0px 0px;
+    /*padding-left: 1%;*/
+}
+
+#map-footer-expand:hover {
+    cursor: pointer;
+}
+
+.map-footer-icon {
+    font-size: 30px;
+}
+
+#footer-label {
+    float: left;
+    padding-top: 4%;
+    font-size: 16px
+}
+
+#loading-spinner {
+    position: absolute;
+    margin-left: 50%;
+    margin-top: 300px;
+    display: none;
 }

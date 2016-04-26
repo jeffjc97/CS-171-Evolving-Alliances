@@ -18,8 +18,30 @@ $('.alliance-type-btn').click(function() {
 		$('#alliance-type-select').find('.active').removeClass('active');
 		$(this).addClass('active');
 		animateAlliances("end");
-		updateVisualization();
+		updateVisualization(false);
 	}
+});
+
+$('#map-footer-expand').click(function() {
+	if ($(this).hasClass("open")) {
+		$(this).css("padding-left", "1%");
+		$('#map-footer').css("height", 0);
+		$(this).css("bottom", 0);
+		$("#footer-label").text("Change Year");
+		$(".map-footer-icon").removeClass("fa-chevron-down");
+		$(".map-footer-icon").addClass("fa-chevron-up");
+	}
+	else {
+		$('#map-footer').css("height", "10%");
+		$(this).css("bottom", "10%");
+		$(this).css("padding-left", "0%");
+		$("#footer-label").text("");
+		$(".map-footer-icon").removeClass("fa-chevron-up");
+		$(".map-footer-icon").addClass("fa-chevron-down");
+	}
+	$(this).toggleClass("open");
+	// $("#map-footer").css("height", '10%');
+	// $(this).hide();
 });
 
 var year;
@@ -49,8 +71,21 @@ var forceSvg = d3.select("#force-map").append("svg")
 	.attr("height", height)
 	.style("display", "block")
 	.style("margin", "auto")
+	.append("g");
 
-force = d3.layout.force().size([width, height]);
+var loadingScreen = d3.select("#force-map svg").append("rect")
+	.attr("x", 0)
+	.attr("y", 0)
+	.attr("width", width)
+	.attr("height", height)
+	.attr("fill", "grey")
+	.style("fill-opacity", 0);
+
+force = d3.layout.force()
+			.size([width, height])
+			.gravity(0.01)
+			// .linkDistance(30)
+			.linkDistance(function(d) { return 2 * getDistance(d.alliance_type); });
 
 var world;
 
@@ -82,10 +117,10 @@ queue()
 		data3.forEach(function(d){codes[d.id] = d});
 		country_id = 840;
 		animateAlliances("end");
-		updateVisualization();
+		updateVisualization(false);
 	});
 
-function updateVisualization() {
+function updateVisualization(fromAnimation) {
 	world = topojson.feature(data1, data1.objects.countries).features;
 
 	year = d3.select("#year").property("value");
@@ -200,12 +235,15 @@ function updateVisualization() {
 	line.exit().remove();
 
 	updateCountry(country_id);
-
-	updateForce(data2.nodes, linkdata);
+	if (!fromAnimation) {
+		updateForce(data2.nodes, linkdata);
+	};
 
 }
 
 function updateForce(n, l) {
+	console.log("here");
+	forceSvg.selectAll("*").remove();
 	nodes = JSON.parse(JSON.stringify(n));
 	links = JSON.parse(JSON.stringify(l));
 
@@ -249,11 +287,8 @@ function updateForce(n, l) {
 	});
 
 	force
-		.gravity(0.01)
 		.nodes(nodes)
 		.links(links)
-		// .linkDistance(30)
-		.linkDistance(function(d) { return 2 * getDistance(d.alliance_type); })
 		.start();
 
 	var link = forceSvg.selectAll("line")
@@ -289,24 +324,30 @@ function updateForce(n, l) {
 }
 
 function animateAlliances(type) {
+	year = +d3.select("#year").property("value");
 	if (type == "start" && intervalID == -1) {
+		loadingScreen.style("fill-opacity", 0.5);
+		$('#loading-spinner').show();
 		$('.animate-btn').prop('disabled', true);
 		$('.stop-btn').prop('disabled', false);
-		curYear = 0;
+		curYear = year - 1816;
 		intervalID = setInterval(function() {
 			$('#year').val(curYear + 1816);
 			curYear = (curYear + 1) % 195;
-			updateVisualization();
+			updateVisualization(true);
 		}, 100);
 
 	}
 	else if (type == "end") {
+		loadingScreen.style("fill-opacity", 0);
+		$('#loading-spinner').hide();
 		$('.animate-btn').prop('disabled', false);
 		$('.stop-btn').prop('disabled', true);
 		if (intervalID != -1) {
 			clearInterval(intervalID);
 			intervalID = -1;
 		}
+		updateVisualization(false);
 	}
 }
 
