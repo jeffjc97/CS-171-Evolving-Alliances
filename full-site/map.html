@@ -37,7 +37,12 @@
 		<h1>Evolving Alliances</h1> 
 		<p>How alliances have evolved over time.</p>
   	</div>
-	<div id="force-map"></div>
+	<div id="force-map">
+		<div id="loading-spinner">
+			<i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw margin-bottom"></i>
+			<span class="sr-only">Loading...</span>
+		</div>
+	</div>
 	<h1 class="title-card global-alliance-title">Global Alliances</h1>
 	<div id="world-map-container" class="row">
 		<div id="world-map" class="col-md-10"></div>
@@ -82,7 +87,7 @@
 			</div>
 			<div class="timeline-container col-md-10">
 				<div class="vis-explain">Drag the slider to see alliances for different years, or click play to start the animation</div>
-				<input type="range" min="1816" max="2012" value="2012" id="year" step="1" oninput="updateVisualization()">
+				<input type="range" min="1816" max="2012" value="2012" id="year" step="1" oninput="updateVisualization(false)">
 			</div>
 		</div>
 	</div>

@@ -154,3 +154,10 @@ path {
     padding-top: 4%;
     font-size: 16px
 }
+
+#loading-spinner {
+    position: absolute;
+    margin-left: 50%;
+    margin-top: 300px;
+    display: none;
+}
