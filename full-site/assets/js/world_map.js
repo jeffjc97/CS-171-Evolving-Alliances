@@ -63,7 +63,7 @@ var countrySvg = d3.select("#country-view").append("svg")
 	.attr("width", width)
 	.attr("height", height)
 	.style("display", "block")
-	.style("margin", "auto")
+	.style("margin", "auto");
 	
 
 var forceSvg = d3.select("#force-map").append("svg")
@@ -105,10 +105,12 @@ queue()
 	.defer(d3.json, "data/world-110m.json")
 	.defer(d3.json, "data/alliances.json")
 	.defer(d3.csv, "data/ids_to_codes.csv")
-	.await(function(error, mapTop, alliances, ids){
+	.defer(d3.csv, "data/historical_data.csv")
+	.await(function(error, mapTop, alliances, ids,history){
 		data1 = mapTop;
 		data2 = alliances;
 		data3 = ids;
+
 
 		nodesById = {};
 		data2.nodes.forEach(function(d){nodesById[d.id] = d});
@@ -116,6 +118,13 @@ queue()
 		codes = {};
 		data3.forEach(function(d){codes[d.id] = d});
 		country_id = 840;
+
+		history.forEach(function(d){
+			d.start = +d.start;
+			d.end = +d.end;
+		});
+
+		data4 = history;
 		animateAlliances("end");
 		updateVisualization(false);
 	});
@@ -234,6 +243,8 @@ function updateVisualization(fromAnimation) {
 
 	line.exit().remove();
 
+	showHistory(year);
+
 	updateCountry(country_id);
 	if (!fromAnimation) {
 		updateForce(data2.nodes, linkdata);
@@ -323,20 +334,20 @@ function updateForce(n, l) {
 		.style("fill", "grey")
 		.style("fill-opacity", 0.8)
 		.on('mouseover', tip.show)
-		// .on("mousemove", function (d) {
-		// 	var currentState = this;
-		// 	d3.select(this)
-		// 		.style("fill", "#4EB980")
-		// 		.style("cursor", "pointer");
-		// 	return tip
-		// 		.style("top", (d3.event.pageY - 40) + "px")
-		// 		.style("left", (d3.event.pageX) + "px");
-		// })
-		// .on('mouseout', function (d) {
-		// 	var currentState = this;
-		// 	d3.select(this).style("fill", "#126e61");
-		// 	tip.hide();
-		// })
+		 .on("mousemove", function (d) {
+		 	var currentState = this;
+		 	d3.select(this)
+		 		.style("fill", "#4EB980")
+		 		.style("cursor", "pointer");
+		 	return tip
+		 		.style("top", (d3.event.pageY - 40) + "px")
+		 		.style("left", (d3.event.pageX) + "px");
+		 })
+		 .on('mouseout', function (d) {
+		 	var currentState = this;
+		 	d3.select(this).style("fill", "grey");
+		 	tip.hide();
+		 })
 		.on("click", function(d) {
 			country_id = codes_to_ids(d.id);
 			updateCountry(country_id);
@@ -548,4 +559,14 @@ function codes_to_ids (ccode) {
   		}
 	}	
 	return -1;
+}
+
+function showHistory(year){
+	text = "";
+	for (var i=0;i<data4.length;i++) {
+		if (year>=data4[i].start && year<=data4[i].end) {
+			text += (year + " - " + data4[i].name);
+		}
+	}
+	$("#info").html(text);
 }
