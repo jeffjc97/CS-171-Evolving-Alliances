@@ -30,10 +30,19 @@ path {
     padding-left: 2%;
 }
 
-#alliance-type-select {
-    margin-top: 10px;
+.world-map-buttons {
+    /*margin-top: 10px;*/
     width: 100%;
 }
+
+.btn-title {
+    margin-top: 10px;
+}
+
+/*#alliance-type-select {
+    margin-top: 10px;
+    width: 100%;
+}*/
 
 #timeline-buttons button {
     width: 48%;
@@ -108,20 +117,21 @@ path {
     margin-right: 0px;
 }
 
-.alliance-type-btn {
+
+.world-type-btn {
     background-color: #126e61;
     border-color: #158475!important;
 }
 
-.alliance-type-btn:hover {
+.world-type-btn:hover {
     background-color: #4EB980;
 }
 
-.alliance-type-btn.active {
+.world-type-btn.active {
     background-color: #4EB980;
 }
 
-.alliance-type-btn.active:hover {
+.world-type-btn.active:hover {
     background-color: #a4dbbd;
 }
 
@@ -157,7 +167,31 @@ path {
 
 #loading-spinner {
     position: absolute;
-    margin-left: 50%;
-    margin-top: 300px;
+    margin-left: 500px;
+    margin-top: 250px;
+    z-index: 100;
+    font-size: 30px;
     display: none;
+}
+
+/*#global-vis-select {
+    width: 100%;
+}*/
+
+.global-vis-btn {
+    width: 50%;
+}
+
+.navbar {
+    margin-bottom: 0px!important;
+}
+
+.zoom {
+    padding: 4px 6px;
+}
+
+#zoom-buttons {
+    position: absolute;
+    margin-left: 50px;
+    margin-top: 550px;
 }
