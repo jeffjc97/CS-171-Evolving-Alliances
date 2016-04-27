@@ -22,6 +22,25 @@ $('.alliance-type-btn').click(function() {
 	}
 });
 
+$('.global-vis-btn').click(function() {
+	if (!$(this).hasClass('active')) {
+		$('#global-vis-select').find('.active').removeClass('active');
+		$(this).addClass('active');
+		animateAlliances("end");
+		console.log($(this).attr("vtype"));
+		if ($(this).attr("vtype") == "map") {
+			$('#zoom-buttons').show();
+			svg.style("display", "block");
+			forceSvgPre.style("display", "none");
+		}
+		else {
+			$('#zoom-buttons').hide();
+			svg.style("display", "none");
+			forceSvgPre.style("display", "block");
+		}
+	}
+});
+
 $('#map-footer-expand').click(function() {
 	if ($(this).hasClass("open")) {
 		$(this).css("padding-left", "1%");
@@ -66,12 +85,15 @@ var countrySvg = d3.select("#country-view").append("svg")
 	.style("margin", "auto");
 	
 
-var forceSvg = d3.select("#force-map").append("svg")
+var forceSvgPre = d3.select("#world-map").append("svg")
 	.attr("width", width)
 	.attr("height", height)
+	.attr("class", "force")
 	.style("display", "block")
+	// .style("display", "none")
 	.style("margin", "auto")
-	.append("g");
+
+var forceSvg = forceSvgPre.append("g");
 
 var loadingScreen = d3.select("#force-map svg").append("rect")
 	.attr("x", 0)
@@ -126,6 +148,7 @@ queue()
 
 		data4 = history;
 		animateAlliances("end");
+		forceSvgPre.style("display", "none");
 		updateVisualization(false);
 	});
 
@@ -152,7 +175,6 @@ function updateVisualization(fromAnimation) {
 
 	svg.call(tip);
 
-
 	g.selectAll("path")
 		.data(world)
 		.enter()
@@ -165,6 +187,13 @@ function updateVisualization(fromAnimation) {
 			d3.select(this)
 				.style("fill", "#4EB980")
 				.style("cursor", "pointer");
+			console.log(svg.selectAll("line"));
+			// svg.selectAll("line").filter(function(l) {
+			// 	if (codes[d.id].ccode == l.source || codes[d.id].ccode == l.target) {
+			// 		return true;
+			// 	}
+			// 	return false;
+			// }).style("stroke", "red");
 			return tip
 				.style("top", (d3.event.pageY - 40) + "px")
 				.style("left", (d3.event.pageX) + "px");
@@ -172,6 +201,12 @@ function updateVisualization(fromAnimation) {
 		.on('mouseout', function (d) {
 			var currentState = this;
 			d3.select(this).style("fill", "#126e61");
+			// svg.selectAll("line").filter(function(l) {
+			// 	if (codes[d.id].ccode == l.source || codes[d.id].ccode == l.target) {
+			// 		return true;
+			// 	}
+			// 	return false;
+			// }).style("stroke", "#a4dbbd");
 			tip.hide();
 		})
 		.on("click", function(d) {
@@ -208,6 +243,7 @@ function updateVisualization(fromAnimation) {
 		.enter()
 		.append("line")
 		.style("stroke", "#a4dbbd")
+		.style("opacity", 0.5)
 		.attr("x1", function(d) {
 			var id = d.source;
 			if (id in nodesById){
@@ -321,7 +357,7 @@ function updateForce(n, l) {
 		.attr("y1", function(d) { return d.source.y; })
 		.attr("x2", function(d) { return d.target.x; })
 		.attr("y2", function(d) { return d.target.y; })
-		.style("stroke", "red");
+		.style("stroke", "#a4dbbd");
 
 	var node = forceSvg.selectAll("g")
 		.data(nodes)
@@ -331,9 +367,10 @@ function updateForce(n, l) {
 		.append("path")
 		.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
 		.attr("d", function(d) { return path(d.feature); })
-		.style("fill", "grey")
+		.style("fill", "#126e61")
 		.style("fill-opacity", 0.8)
 		.on('mouseover', tip.show)
+
 		 .on("mousemove", function (d) {
 		 	var currentState = this;
 		 	d3.select(this)
@@ -348,7 +385,9 @@ function updateForce(n, l) {
 		 	d3.select(this).style("fill", "grey");
 		 	tip.hide();
 		 })
+
 		.on("click", function(d) {
+			if (d3.event.defaultPrevented) return;
 			country_id = codes_to_ids(d.id);
 			updateCountry(country_id);
 			$('html, body').animate({
@@ -448,6 +487,21 @@ function updateCountry(id){
 
 	$('.country-alliance-title').text("Country Alliances: " + statename);
 
+    var tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .html(function(d) {
+            var id = d.id;
+            if(!(id in codes)){
+                return "No Data";
+            }
+
+            else {
+                return codes[id].statenme;
+            }
+        });
+
+    countrySvg.call(tip);
+
 	countrySvg.selectAll("path")
 		.data(world)
 		.enter()
@@ -485,6 +539,19 @@ function updateCountry(id){
 				}
 			}
 			return "gray"
+		})
+        .on('mouseover', tip.show)
+		.on("mousemove", function (d) {
+			d3.select(this)
+				.style("fill-opacity", 0.5)
+				.style("cursor", "pointer");
+			return tip
+				.style("top", (d3.event.pageY - 40) + "px")
+				.style("left", (d3.event.pageX) + "px");
+		})
+		.on('mouseout', function (d) {
+			d3.select(this).style("fill-opacity", 1);
+			tip.hide();
 		})
 		.on("click", function(d) {
 			country_id = d.id;
@@ -534,8 +601,11 @@ function getDistance(arr) {
 
 function loadScreen(toggle) {
 	if (toggle) {
-		$('#loading-spinner').show();
-		loadingScreen = d3.select("#force-map svg").append("rect")
+		if ($($('.global-vis-btn')[1]).hasClass("active")) {
+			$('#loading-spinner').show();
+		}
+		console.log
+		loadingScreen = d3.selectAll("#world-map svg.force").append("rect")
 			.attr("x", 0)
 			.attr("y", 0)
 			.attr("width", width)

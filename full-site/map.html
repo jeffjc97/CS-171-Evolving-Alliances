@@ -37,24 +37,43 @@
 		<h1>Evolving Alliances</h1> 
 		<p>How alliances have evolved over time.</p>
   	</div>
-	<div id="force-map">
+	<!-- <div id="force-map">
 		<div id="loading-spinner">
 			<i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw margin-bottom"></i>
 			<span class="sr-only">Loading...</span>
 		</div>
-	</div>
+	</div> -->
 	<h1 class="title-card global-alliance-title">Global Alliances</h1>
 	<div id="world-map-container" class="row">
-		<div id="world-map" class="col-md-10"></div>
+		<div id="world-map" class="col-md-10">
+			<div id="loading-spinner">
+				<i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw margin-bottom"></i>
+				<span class="sr-only">Loading...</span>
+			</div>
+			<div id="zoom-buttons">
+				<button id="zoom_in" class="world-type-btn btn btn-primary zoom">
+					<i class="fa fa-plus fa-fw"></i>
+				</button>
+				<button id="zoom_out" class="world-type-btn btn btn-primary zoom">
+					<i class="fa fa-minus fa-fw"></i>
+				</button>
+			</div>
+		</div>
 		<div id="world-map-buttons" class="col-md-2">
-			<button id="zoom_in" class="zoom">+</button>
-			<button id="zoom_out" class="zoom">-</button>
-			<div id="alliance-type-select" class="btn-group-vertical">
-				<button type="button" atype="4" class="alliance-type-btn active btn btn-primary">All</button>
-			 	<button type="button" atype="0" class="alliance-type-btn btn btn-primary">Defense</button>
-				<button type="button" atype="1" class="alliance-type-btn btn btn-primary">Neutrality</button>
-				<button type="button" atype="2" class="alliance-type-btn btn btn-primary">Nonaggression</button>
-				<button type="button" atype="3" class="alliance-type-btn btn btn-primary">Entente</button>
+
+			<div class="btn-title">Visualization Type</div>
+			<div id="global-vis-select" class="world-map-buttons btn-group">
+			  	<button type="button" vtype="map" class="world-type-btn btn global-vis-btn active btn-primary">Map</button>
+			  	<button type="button" vtype="network" class="world-type-btn btn global-vis-btn btn-primary">Network</button>
+			</div>
+			<div class="btn-title">Alliance Type</div>
+			<div id="alliance-type-select" class="world-map-buttons btn-group-vertical">
+				<button type="button" atype="4" class="world-type-btn alliance-type-btn active btn btn-primary">All</button>
+			 	<button type="button" atype="0" class="world-type-btn alliance-type-btn btn btn-primary">Defense</button>
+				<button type="button" atype="1" class="world-type-btn alliance-type-btn btn btn-primary">Neutrality</button>
+				<button type="button" atype="2" class="world-type-btn alliance-type-btn btn btn-primary">Nonagression</button>
+				<button type="button" atype="3" class="world-type-btn alliance-type-btn btn btn-primary">Entente</button>
+
 			</div>
 			<div id="historical-info">
 				<h3>Historical Dates</h3>
@@ -74,7 +93,7 @@
 	<div id="map-footer">
 		<div id="map-footer-container" class="row">
 			<div class="timeline-info-container col-md-2">
-				<div class="timeline-year">Year: 2012</div>
+				<div class="timeline-year">Year: 1970</div>
 				<div id="timeline-buttons">
 					<button type="button" class="animate-btn btn btn-primary">
 						<i class="fa fa-play fa-fw"></i>
@@ -86,7 +105,7 @@
 			</div>
 			<div class="timeline-container col-md-10">
 				<div class="vis-explain">Drag the slider to see alliances for different years, or click play to start the animation</div>
-				<input type="range" min="1816" max="2012" value="2012" id="year" step="1" oninput="updateVisualization(false)">
+				<input type="range" min="1816" max="2012" value="1970" id="year" step="1" oninput="updateVisualization(false)">
 			</div>
 		</div>
 	</div>
