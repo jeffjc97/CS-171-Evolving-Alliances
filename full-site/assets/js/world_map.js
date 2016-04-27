@@ -179,6 +179,13 @@ function updateVisualization(fromAnimation) {
 			d3.select(this)
 				.style("fill", "#4EB980")
 				.style("cursor", "pointer");
+			console.log(svg.selectAll("line"));
+			// svg.selectAll("line").filter(function(l) {
+			// 	if (codes[d.id].ccode == l.source || codes[d.id].ccode == l.target) {
+			// 		return true;
+			// 	}
+			// 	return false;
+			// }).style("stroke", "red");
 			return tip
 				.style("top", (d3.event.pageY - 40) + "px")
 				.style("left", (d3.event.pageX) + "px");
@@ -186,6 +193,12 @@ function updateVisualization(fromAnimation) {
 		.on('mouseout', function (d) {
 			var currentState = this;
 			d3.select(this).style("fill", "#126e61");
+			// svg.selectAll("line").filter(function(l) {
+			// 	if (codes[d.id].ccode == l.source || codes[d.id].ccode == l.target) {
+			// 		return true;
+			// 	}
+			// 	return false;
+			// }).style("stroke", "#a4dbbd");
 			tip.hide();
 		})
 		.on("click", function(d) {
@@ -222,6 +235,7 @@ function updateVisualization(fromAnimation) {
 		.enter()
 		.append("line")
 		.style("stroke", "#a4dbbd")
+		.style("opacity", 0.5)
 		.attr("x1", function(d) {
 			var id = d.source;
 			if (id in nodesById){
