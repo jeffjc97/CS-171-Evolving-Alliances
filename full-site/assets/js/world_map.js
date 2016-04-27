@@ -90,8 +90,7 @@ var forceSvgPre = d3.select("#world-map").append("svg")
 	.attr("height", height)
 	.attr("class", "force")
 	.style("display", "block")
-	// .style("display", "none")
-	.style("margin", "auto")
+	.style("margin", "auto");
 
 var forceSvg = forceSvgPre.append("g");
 
@@ -106,7 +105,6 @@ var loadingScreen = d3.select("#force-map svg").append("rect")
 force = d3.layout.force()
 			.size([width, height])
 			.gravity(0.01)
-			// .linkDistance(30)
 			.linkDistance(function(d) { return 2 * getDistance(d.alliance_type); });
 
 var world;
@@ -133,10 +131,10 @@ queue()
 		data3 = ids;
 
 		nodesById = {};
-		data2.nodes.forEach(function(d){nodesById[d.id] = d});
+		data2.nodes.forEach(function(d){nodesById[d.id] = d; });
 
 		codes = {};
-		data3.forEach(function(d){codes[d.id] = d});
+		data3.forEach(function(d){codes[d.id] = d; });
 		country_id = 840;
 		animateAlliances("end");
 		forceSvgPre.style("display", "none");
@@ -241,7 +239,7 @@ function updateVisualization(fromAnimation) {
 				var xy = projection([nodesById[id].longitude, nodesById[id].latitude]);
 				return xy[0];
 			}
-			return 0
+			return 0;
 		})
 		.attr("y1", function(d) {
 			var id = d.source;
@@ -249,7 +247,7 @@ function updateVisualization(fromAnimation) {
 				var xy = projection([nodesById[id].longitude, nodesById[id].latitude]);
 				return xy[1];
 			}
-			return 0
+			return 0;
 		})
 		.attr("x2", function(d) {
 			var id = d.target;
@@ -257,7 +255,7 @@ function updateVisualization(fromAnimation) {
 				var xy = projection([nodesById[id].longitude, nodesById[id].latitude]);
 				return xy[0];
 			}
-			return 0
+			return 0;
 		})
 		.attr("y2", function(d) {
 			var id = d.target;
@@ -265,7 +263,7 @@ function updateVisualization(fromAnimation) {
 				var xy = projection([nodesById[id].longitude, nodesById[id].latitude]);
 				return xy[1];
 			}
-			return 0
+			return 0;
 		});
 
 	line.exit().remove();
@@ -273,7 +271,7 @@ function updateVisualization(fromAnimation) {
 	updateCountry(country_id);
 	if (!fromAnimation) {
 		updateForce(data2.nodes, linkdata);
-	};
+	}
 
 }
 
@@ -474,20 +472,20 @@ function updateCountry(id){
 
 	$('.country-alliance-title').text("Country Alliances: " + statename);
 
-    var tip = d3.tip()
-        .attr('class', 'd3-tip')
-        .html(function(d) {
-            var id = d.id;
-            if(!(id in codes)){
-                return "No Data";
-            }
+	var tip = d3.tip()
+		.attr('class', 'd3-tip')
+		.html(function(d) {
+			var id = d.id;
+			if(!(id in codes)){
+				return "No Data";
+			}
 
-            else {
-                return codes[id].statenme;
-            }
-        });
+			else {
+				return codes[id].statenme;
+			}
+		});
 
-    countrySvg.call(tip);
+	countrySvg.call(tip);
 
 	countrySvg.selectAll("path")
 		.data(world)
@@ -510,24 +508,24 @@ function updateCountry(id){
 			//console.log(d.id);
 			//console.log(codes[d.id]);
 			if (d.id == id){
-				return "#126e61"
+				return "#126e61";
 			} else if (d.id in codes){
 				var code = codes[d.id].ccode;
 				if (isNaN(code) || !(code in allies) ){
-					return "gray"
+					return "gray";
 				} else if (allies[code][0] == 1){
-					return "#810f7c"
+					return "#810f7c";
 				} else if (allies[code][1] == 1){
-					return "#8856a7"
+					return "#8856a7";
 				} else if (allies[code][2] == 1){
 					return "#8c96c6";
 				} else if (allies[code][3] == 1){
 					return "#b3cde3";
 				}
 			}
-			return "gray"
+			return "gray";
 		})
-        .on('mouseover', tip.show)
+		.on('mouseover', tip.show)
 		.on("mousemove", function (d) {
 			d3.select(this)
 				.style("fill-opacity", 0.5)
@@ -555,7 +553,7 @@ function updateCountry(id){
 		.attr("height", 15)
 		.attr("y", function(d,i) { return i*16; })
 		.attr("width", 10)
-		.style("fill", function(d) { return d });
+		.style("fill", function(d) { return d; });
 
 	legend = g.selectAll("text")
 		.data(["Selected Country","Defense","Neutrality","Nonaggression","Entente","No Alliance"])
@@ -564,7 +562,7 @@ function updateCountry(id){
 		.attr("y", function(d,i) { return (i*16 + 15); })
 		.attr("x", 13);
 
-};
+}
 
 function getDistance(arr) {
 	if (arr[0] == 1) {
@@ -591,7 +589,6 @@ function loadScreen(toggle) {
 		if ($($('.global-vis-btn')[1]).hasClass("active")) {
 			$('#loading-spinner').show();
 		}
-		console.log
 		loadingScreen = d3.selectAll("#world-map svg.force").append("rect")
 			.attr("x", 0)
 			.attr("y", 0)
@@ -609,11 +606,11 @@ function loadScreen(toggle) {
 
 function codes_to_ids (ccode) {
 	for (var key in codes) {
-  		if (codes.hasOwnProperty(key)) {
-    		if (codes[key].ccode == ccode) {
-    			return codes[key].id
+		if (codes.hasOwnProperty(key)) {
+			if (codes[key].ccode == ccode) {
+				return codes[key].id;
 			}
-  		}
-	}	
+		}
+	}
 	return -1;
 }
