@@ -553,6 +553,7 @@ function updateCountry(id){
 		})
 		.on("click", function(d) {
 			country_id = d.id;
+			tip.hide();
 			updateCountry(country_id);
 		});
 
