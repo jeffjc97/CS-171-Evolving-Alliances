@@ -338,6 +338,7 @@ function updateForce(n, l) {
 			tip.hide();
 		})
 		.on("click", function(d) {
+			if (d3.event.defaultPrevented) return;
 			country_id = codes_to_ids(d.id);
 			updateCountry(country_id);
 			$('html, body').animate({
