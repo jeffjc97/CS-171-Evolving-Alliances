@@ -296,7 +296,7 @@ function updateForce(n, l) {
 	var tip = d3.tip()
 		.attr('class', 'd3-tip')
 		.html(function(d) {
-			console.log(d);
+			//console.log(d);
 			return d.country;
 		});
 
