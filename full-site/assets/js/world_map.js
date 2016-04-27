@@ -323,20 +323,20 @@ function updateForce(n, l) {
 		.style("fill", "grey")
 		.style("fill-opacity", 0.8)
 		.on('mouseover', tip.show)
-		// .on("mousemove", function (d) {
-		// 	var currentState = this;
-		// 	d3.select(this)
-		// 		.style("fill", "#4EB980")
-		// 		.style("cursor", "pointer");
-		// 	return tip
-		// 		.style("top", (d3.event.pageY - 40) + "px")
-		// 		.style("left", (d3.event.pageX) + "px");
-		// })
-		// .on('mouseout', function (d) {
-		// 	var currentState = this;
-		// 	d3.select(this).style("fill", "#126e61");
-		// 	tip.hide();
-		// })
+		.on("mousemove", function (d) {
+			var currentState = this;
+			d3.select(this)
+				.style("fill", "#4EB980")
+				.style("cursor", "pointer");
+			return tip
+				.style("top", (d3.event.pageY - 40) + "px")
+				.style("left", (d3.event.pageX) + "px");
+		})
+		.on('mouseout', function (d) {
+			var currentState = this;
+			d3.select(this).style("fill", "grey");
+			tip.hide();
+		})
 		.on("click", function(d) {
 			country_id = codes_to_ids(d.id);
 			updateCountry(country_id);
