@@ -286,10 +286,22 @@ function updateForce(n, l) {
 		d.target = idIndices.indexOf(+d.target);
 	});
 
+	console.log(nodes);
+	console.log(links);
+
 	force
 		.nodes(nodes)
 		.links(links)
 		.start();
+
+	var tip = d3.tip()
+		.attr('class', 'd3-tip')
+		.html(function(d) {
+			console.log(d);
+			return d.country;
+		});
+
+	svg.call(tip);
 
 	var link = forceSvg.selectAll("line")
 		.data(links)
@@ -309,7 +321,29 @@ function updateForce(n, l) {
 		.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
 		.attr("d", function(d) { return path(d.feature); })
 		.style("fill", "grey")
-		.style("fill-opacity", 0.8);
+		.style("fill-opacity", 0.8)
+		.on('mouseover', tip.show)
+		// .on("mousemove", function (d) {
+		// 	var currentState = this;
+		// 	d3.select(this)
+		// 		.style("fill", "#4EB980")
+		// 		.style("cursor", "pointer");
+		// 	return tip
+		// 		.style("top", (d3.event.pageY - 40) + "px")
+		// 		.style("left", (d3.event.pageX) + "px");
+		// })
+		// .on('mouseout', function (d) {
+		// 	var currentState = this;
+		// 	d3.select(this).style("fill", "#126e61");
+		// 	tip.hide();
+		// })
+		.on("click", function(d) {
+			country_id = codes_to_ids(d.id);
+			updateCountry(country_id);
+			$('html, body').animate({
+				scrollTop: $('.country-alliance-title').offset().top
+			}, 500);
+		});
 
 	force.on("tick", function(e) {
 		link.attr("x1", function(d) { return d.source.x; })
@@ -326,8 +360,7 @@ function updateForce(n, l) {
 function animateAlliances(type) {
 	year = +d3.select("#year").property("value");
 	if (type == "start" && intervalID == -1) {
-		loadingScreen.style("fill-opacity", 0.5);
-		$('#loading-spinner').show();
+		loadScreen(true);
 		$('.animate-btn').prop('disabled', true);
 		$('.stop-btn').prop('disabled', false);
 		curYear = year - 1816;
@@ -339,8 +372,7 @@ function animateAlliances(type) {
 
 	}
 	else if (type == "end") {
-		loadingScreen.style("fill-opacity", 0);
-		$('#loading-spinner').hide();
+		loadScreen(false);
 		$('.animate-btn').prop('disabled', false);
 		$('.stop-btn').prop('disabled', true);
 		if (intervalID != -1) {
@@ -487,4 +519,33 @@ function getDistance(arr) {
 		console.log("wtf");
 		return 1000;
 	}
+}
+
+function loadScreen(toggle) {
+	if (toggle) {
+		$('#loading-spinner').show();
+		loadingScreen = d3.select("#force-map svg").append("rect")
+			.attr("x", 0)
+			.attr("y", 0)
+			.attr("width", width)
+			.attr("height", height)
+			.attr("fill", "grey")
+			.style("fill-opacity", 0.5);
+	}
+	else {
+		$('#loading-spinner').hide();
+		loadingScreen.remove();
+	}
+
+}
+
+function codes_to_ids (ccode) {
+	for (var key in codes) {
+  		if (codes.hasOwnProperty(key)) {
+    		if (codes[key].ccode == ccode) {
+    			return codes[key].id
+			}
+  		}
+	}	
+	return -1;
 }
