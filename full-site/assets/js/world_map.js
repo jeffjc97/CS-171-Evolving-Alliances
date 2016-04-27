@@ -326,8 +326,7 @@ function updateForce(n, l) {
 function animateAlliances(type) {
 	year = +d3.select("#year").property("value");
 	if (type == "start" && intervalID == -1) {
-		loadingScreen.style("fill-opacity", 0.5);
-		$('#loading-spinner').show();
+		loadScreen(true);
 		$('.animate-btn').prop('disabled', true);
 		$('.stop-btn').prop('disabled', false);
 		curYear = year - 1816;
@@ -339,8 +338,7 @@ function animateAlliances(type) {
 
 	}
 	else if (type == "end") {
-		loadingScreen.style("fill-opacity", 0);
-		$('#loading-spinner').hide();
+		loadScreen(false);
 		$('.animate-btn').prop('disabled', false);
 		$('.stop-btn').prop('disabled', true);
 		if (intervalID != -1) {
@@ -487,4 +485,22 @@ function getDistance(arr) {
 		console.log("wtf");
 		return 1000;
 	}
+}
+
+function loadScreen(toggle) {
+	if (toggle) {
+		$('#loading-spinner').show();
+		loadingScreen = d3.select("#force-map svg").append("rect")
+			.attr("x", 0)
+			.attr("y", 0)
+			.attr("width", width)
+			.attr("height", height)
+			.attr("fill", "grey")
+			.style("fill-opacity", 0.5);
+	}
+	else {
+		$('#loading-spinner').hide();
+		loadingScreen.remove();
+	}
+
 }
