@@ -166,7 +166,6 @@ function updateVisualization(fromAnimation) {
 
 	svg.call(tip);
 
-
 	g.selectAll("path")
 		.data(world)
 		.enter()
@@ -475,6 +474,21 @@ function updateCountry(id){
 
 	$('.country-alliance-title').text("Country Alliances: " + statename);
 
+    var tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .html(function(d) {
+            var id = d.id;
+            if(!(id in codes)){
+                return "No Data";
+            }
+
+            else {
+                return codes[id].statenme;
+            }
+        });
+
+    countrySvg.call(tip);
+
 	countrySvg.selectAll("path")
 		.data(world)
 		.enter()
@@ -512,6 +526,19 @@ function updateCountry(id){
 				}
 			}
 			return "gray"
+		})
+        .on('mouseover', tip.show)
+		.on("mousemove", function (d) {
+			d3.select(this)
+				.style("fill-opacity", 0.5)
+				.style("cursor", "pointer");
+			return tip
+				.style("top", (d3.event.pageY - 40) + "px")
+				.style("left", (d3.event.pageX) + "px");
+		})
+		.on('mouseout', function (d) {
+			d3.select(this).style("fill-opacity", 1);
+			tip.hide();
 		})
 		.on("click", function(d) {
 			country_id = d.id;
