@@ -633,7 +633,7 @@ function showHistory(year){
 	text = "";
 	for (var i=0;i<data4.length;i++) {
 		if (year>=data4[i].start && year<=data4[i].end) {
-			text += (year + " - " + data4[i].name);
+			text += ("<b>" + year + " - " + data4[i].name + "</b><br>" + data4[i].info);
 		}
 	}
 	$("#info").html(text);
