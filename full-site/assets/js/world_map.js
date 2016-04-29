@@ -648,5 +648,10 @@ function showHistory(year){
 			text += ("<b>" + year + " - " + data4[i].name + "</b><br>" + data4[i].info);
 		}
 	}
-	$("#info").html(text);
+	if (text != "") {
+		$("#info").html(text);
+	}
+	else {
+		$("#info").html("Some years have historical events that can explain interesting changes in the alliance landscape. Explore the visualization to learn more!");
+	}
 }
