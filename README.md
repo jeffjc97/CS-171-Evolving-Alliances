@@ -24,3 +24,7 @@ A screencast of the different features of our visualization can be viewed here: 
 
 ### Toolbar
 - There is a toolbar at the bottom of the page which allows the user to either start/stop an animation over the years, or manually change the visualization to different years. It is accessible to the user wherever they are on the page, and can also be collapsed for users to have more space to examine the visualizations.
+
+# Acknowledgements
+
+We used [Correlates of War](http://www.correlatesofwar.org/) for our alliance data. We also used a template from [html5up](http://html5up.net/directive) for our home page and edited it slightly to our color scheme.
