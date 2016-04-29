@@ -197,3 +197,7 @@ path {
     margin-left: 50px;
     margin-top: 550px;
 }
+
+.map-svg {
+    background-color: lightcyan;
+}

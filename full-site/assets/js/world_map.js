@@ -63,6 +63,15 @@ $('#map-footer-expand').click(function() {
 	// $(this).hide();
 });
 
+$('#map-footer-expand').hover(
+	function() {
+		$('.map-footer-icon').css("opacity", 0.6);
+	},
+	function() {
+		$('.map-footer-icon').css("opacity", 1);
+	}
+)
+
 var year;
 
 var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", move);
@@ -71,6 +80,7 @@ var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", move);
 var svg = d3.select("#world-map").append("svg")
 	.attr("width", width)
 	.attr("height", height)
+	.attr("class", "map-svg")
 	.style("display", "block")
 	.style("margin", "auto");
 
@@ -81,6 +91,7 @@ svg.call(zoom);
 var countrySvg = d3.select("#country-view").append("svg")
 	.attr("width", width)
 	.attr("height", height)
+	.attr("class", "map-svg")
 	.style("display", "block")
 	.style("margin", "auto");
 	
@@ -89,6 +100,7 @@ var forceSvgPre = d3.select("#world-map").append("svg")
 	.attr("width", width)
 	.attr("height", height)
 	.attr("class", "force")
+	.attr("class", "map-svg")
 	.style("display", "block")
 	.style("margin", "auto");
 
@@ -380,7 +392,7 @@ function updateForce(n, l) {
 		 })
 		 .on('mouseout', function (d) {
 		 	var currentState = this;
-		 	d3.select(this).style("fill", "grey");
+		 	d3.select(this).style("fill", "#126e61");
 		 	tip.hide();
 		 })
 
