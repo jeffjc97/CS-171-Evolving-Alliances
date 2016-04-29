@@ -27,4 +27,4 @@ A screencast of the different features of our visualization can be viewed here: 
 
 # Acknowledgements
 
-We used [Correlates of War](http://www.correlatesofwar.org/) for our alliance data. We also used a template from [html5up](http://html5up.net/directive) for our home page and edited it slightly to our color scheme.
+We used [Correlates of War](http://www.correlatesofwar.org/) for our alliance data. We also used a template from [html5up](http://html5up.net/directive) for our home page and edited it slightly to our color scheme. We also used FontAwesome, jQuery, and D3 JavaScript libraries.
