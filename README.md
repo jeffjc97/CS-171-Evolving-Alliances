@@ -4,9 +4,9 @@ Jeffrey Chang, Miriam Barnum, Isabel Lee
 
 Evolving Alliances is an exploration into the changing landscape of international relations over time through analysis of alliance data. Our dataset, which is provided by Correlates of War, provides alliance data between countries for different years, and we created an interactive visualization of this data.
 
-The visualization can be accessed here: TODO
+The visualization can be accessed [here](http://jeffjc97.github.io/CS-171-Evolving-Alliances).
 
-A screencast of the different features of our visualization can be viewed here: TODO
+A screencast of the different features of our visualization can be viewed [here](https://www.youtube.com/watch?v=HmhMaBFHMbM).
 
 # Features
 - On the home page, there are links to the other pages of the site - project overview, visualization, and data overview.
