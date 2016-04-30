@@ -27,7 +27,6 @@ $('.global-vis-btn').click(function() {
 		$('#global-vis-select').find('.active').removeClass('active');
 		$(this).addClass('active');
 		animateAlliances("end");
-		//console.log($(this).attr("vtype"));
 		if ($(this).attr("vtype") == "map") {
 			$('#zoom-buttons').show();
 			svg.style("display", "block");
@@ -197,7 +196,6 @@ function updateVisualization(fromAnimation) {
 			d3.select(this)
 				.style("fill", "#4EB980")
 				.style("cursor", "pointer");
-			//console.log(svg.selectAll("line"));
 			// svg.selectAll("line").filter(function(l) {
 			// 	if (codes[d.id].ccode == l.source || codes[d.id].ccode == l.target) {
 			// 		return true;
@@ -342,10 +340,6 @@ function updateForce(n, l) {
 		d.source = idIndices.indexOf(+d.source);
 		d.target = idIndices.indexOf(+d.target);
 	});
-
-	//console.log(nodes);
-	//console.log(links);
-
 	force
 		.nodes(nodes)
 		.links(links)
@@ -368,7 +362,6 @@ function updateForce(n, l) {
 		.attr("x2", function(d) { return d.target.x; })
 		.attr("y2", function(d) { return d.target.y; })
 		.style("stroke", "#a4dbbd");
-	console.log(nodes);
 	var node = forceSvg.selectAll("g")
 		.data(nodes)
 		.enter().append("g")
