@@ -459,6 +459,7 @@ function move() {
 	g.selectAll("circle").attr("r", 3 / s);
 }
 
+//zoom by clicking buttons (based on: https://gist.github.com/mgold/c2cc7242c8f800c736c4)
 d3.selectAll('.zoom').on('click', function(){
 	d3.event.preventDefault();
 	var scale = zoom.scale(),
