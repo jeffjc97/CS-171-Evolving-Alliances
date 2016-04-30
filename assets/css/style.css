@@ -1,0 +1,203 @@
+@import url("http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300italic,400,400italic,600,600italic,700,700italic");
+
+path {
+    stroke: white;
+    stroke-width: .5px;
+}
+
+
+.tooltip-title {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.d3-tip {
+    position: absolute;
+    line-height: 1;
+    padding: 12px;
+    background: green;
+    color: #fff;
+    border-radius: 2px;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
+}
+
+.jumbotron {
+    padding-left: 2%;
+}
+
+.world-map-buttons {
+    /*margin-top: 10px;*/
+    width: 100%;
+}
+
+.btn-title {
+    margin-top: 10px;
+}
+
+/*#alliance-type-select {
+    margin-top: 10px;
+    width: 100%;
+}*/
+
+#timeline-buttons button {
+    width: 48%;
+    background-color: #126e61;
+    /*opacity: 1;*/
+}
+
+#timeline-buttons button:hover {
+    background-color: #158475;
+    border-color: #158475;
+}
+
+#slider {
+    padding-left: 2%;
+    padding-right: 2%;
+    margin-bottom: 2%;
+    width: 80%;
+}
+
+.introduction {
+    padding-left: 2%;
+    margin-bottom: 2%;
+    font-size: 16px;
+}
+
+#dataset-about {
+    margin-left: 2%;
+}
+
+.title-card {
+    margin-left: 2%;
+}
+
+#world-map-container {
+    margin: 0px;
+}
+
+.vis-explain {
+    font-style: italic;
+    font-size: 12px;
+}
+
+#map-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 10%;
+    opacity: 0.9;
+    /*background-color: azure;*/
+    background-color: #a4dbbd;
+    z-index: 10;
+    -webkit-transition: height 0.5s;
+    -moz-transition: height 0.5s;
+    transition: height 0.5s;
+}
+
+#map-footer-container {
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+.timeline-year {
+    font-size: 18px;
+}
+
+.timeline-container {
+    padding-top: 1.5%;
+}
+
+#country-view-container {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+
+.world-type-btn {
+    background-color: #126e61;
+    border-color: #158475!important;
+}
+
+.world-type-btn:hover {
+    background-color: #4EB980;
+}
+
+.world-type-btn.active {
+    background-color: #4EB980;
+}
+
+.world-type-btn.active:hover {
+    background-color: #a4dbbd;
+}
+
+#map-footer-expand {
+    z-index: 10;
+    right: 0;
+    /*display: none;*/
+    position: fixed;
+    bottom: 10%;
+    /*width: 5%;*/
+    opacity: 0.9;
+    background-color: #a4dbbd;
+    -webkit-transition: bottom 0.5s;
+    -moz-transition: bottom 0.5s;
+    transition: bottom 0.5s;
+    border-radius: 3px 0px 0px;
+    /*padding-left: 1%;*/
+}
+
+#map-footer-expand:hover {
+    cursor: pointer;
+}
+
+.map-footer-icon {
+    font-size: 30px;
+}
+
+#footer-label {
+    float: left;
+    padding-top: 4%;
+    font-size: 16px
+}
+
+#loading-spinner {
+    position: absolute;
+    margin-left: 500px;
+    margin-top: 250px;
+    z-index: 100;
+    font-size: 30px;
+    display: none;
+}
+
+/*#global-vis-select {
+    width: 100%;
+}*/
+
+.global-vis-btn {
+    width: 50%;
+}
+
+.navbar {
+    margin-bottom: 0px!important;
+}
+
+.zoom {
+    padding: 4px 6px;
+}
+
+#zoom-buttons {
+    position: absolute;
+    margin-left: 50px;
+    margin-top: 550px;
+}
+
+.map-svg {
+    background-color: lightcyan;
+}
