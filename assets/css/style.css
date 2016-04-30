@@ -213,3 +213,7 @@ path {
 .map-svg {
     background-color: lightcyan;
 }
+
+iframe {
+    margin-top: 20px;
+}
