@@ -1,5 +1,11 @@
 @import url("http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300italic,400,400italic,600,600italic,700,700italic");
 
+p {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+}
+
 path {
     stroke: white;
     stroke-width: .5px;
@@ -39,6 +45,8 @@ path {
 
 .btn-title {
     margin-top: 10px;
+    margin-bottom: 5px;
+    text-align: center;
 }
 
 /*#alliance-type-select {

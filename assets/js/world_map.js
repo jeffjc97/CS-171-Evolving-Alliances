@@ -647,6 +647,7 @@ function codes_to_ids (ccode) {
 	return -1;
 }
 
+//show important historical dates
 function showHistory(year){
 	text = "";
 	for (var i=0;i<data4.length;i++) {

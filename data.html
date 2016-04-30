@@ -34,19 +34,34 @@
 </nav>
   	<div class="jumbotron">
 		<h1>About the Data</h1> 
-		<p>Our dataset and its processing.</p>
+		<p>Source and features.</p>
   	</div>
 	<div id="dataset-about">
-			<p>
-				Our data is made available through the <a href="http://www.correlatesofwar.org">Correlates of War</a>.
-				Specifically, we focused on the “Formal Alliances” dataset which includes data on alliances and neutrality
-				agreements between countries around the world, organized by country-dyad and year. 
-			</p>
-			<p>
-				In the future, this data could potentially
-				be supplemented with data on membership in international organizations, or military conflicts (also available
-				from Correlates of War).
-			</p>
+		<p>
+			This project uses version 4.1 of the “Formal Alliances” dataset available through the
+			<a href="http://www.correlatesofwar.org">Correlates of War</a> project [1]. The “Formal Alliances”
+			dataset includes time series data on different types of alliances between members of the interstate
+			system, covering a period from 1816 to 2012.
+		</p>
+		<p>
+			The types of alliances represented in the dataset include:
+		<ul>
+		<li>Defense: one or more members of the alliance has committed to defend other members of the alliance.</li>
+		<li>Neutrality: alliance terms include a promise to remain neutral in conflicts involving
+			other members of the alliance</li>
+		<li>Nonaggression: alliance terms include a promise not to attack one or more states in the alliance</li>
+		<li>Entente: an informal alliance; an understanding that the state would consult with one or more states
+			in the alliance if a crisis occurred</li>
+		</ul>
+		</p>
+		<p>
+			Countries that do not exist today (for instance, Yugoslavia) are not shown on the map. Thus the "Network"
+			view may be particularly useful for the 50 or so years of data, as it displays alliances between the
+			pre-unification German and Italian states.
+		</p>
+		<p>
+			[1] Gibler, Douglas M. 2009. <em>International Military Alliances, 1648-2008</em>. CQ Press.
+		</p>
 	</div>
 
 	<script src="assets/js/jquery.min.js"></script>
