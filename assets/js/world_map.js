@@ -228,7 +228,6 @@ function updateVisualization(fromAnimation) {
 
 // function called that makes all of the nevessary changes to the force diagram
 function updateForce(n, l) {
-	console.log("here");
 	forceSvg.selectAll("*").remove();
 	nodes = JSON.parse(JSON.stringify(n));
 	links = JSON.parse(JSON.stringify(l));
@@ -296,7 +295,6 @@ function updateForce(n, l) {
 		.attr("x2", function(d) { return d.target.x; })
 		.attr("y2", function(d) { return d.target.y; })
 		.style("stroke", "#a4dbbd");
-	console.log(nodes);
 	// setting up country svg nodes in the force diagram
 	var node = forceSvg.selectAll("g")
 		.data(nodes)
