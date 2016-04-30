@@ -253,7 +253,7 @@ function updateVisualization(fromAnimation) {
 		.enter()
 		.append("line")
 		.style("stroke", "#a4dbbd")
-		.style("opacity", 0.5)
+		.style("opacity", 0.7)
 		.attr("x1", function(d) {
 			var id = d.source;
 			if (id in nodesById){

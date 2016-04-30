@@ -43,6 +43,9 @@
 			<span class="sr-only">Loading...</span>
 		</div>
 	</div> -->
+	<p id="instructions">	Use the slider at the bottom of the page to view different years. Use the buttons on the side to toggle between
+		map and network views of global alliances, or to filter by alliance type. Clicking on a country in the global
+		map or network view will take you to a map displaying that country's alliances. Both maps can be animated by pressing play. </p>
 	<h1 class="title-card global-alliance-title">Global Alliances</h1>
 	<div id="world-map-container" class="row">
 		<div id="world-map" class="col-md-10">
@@ -75,11 +78,10 @@
 				<button type="button" atype="1" title="terms include neutrality toward one or more states in the alliance"
 						class="world-type-btn alliance-type-btn btn btn-primary">Neutrality</button>
 				<button type="button" atype="2" title="promise of non-aggression toward one or more states in the alliance"
-						class="world-type-btn alliance-type-btn btn btn-primary">Nonagression</button>
+						class="world-type-btn alliance-type-btn btn btn-primary">Nonaggression</button>
 				<button type="button" atype="3" title="an understanding that the state would consult with one or more states in the alliance if a crisis occurred"
 						class="world-type-btn alliance-type-btn btn btn-primary">Entente</button>
 			</div>
-			<br/>
 			<br/>
 			<p><a href="data.html">More about alliance types.</a></p>
 			<div id="historical-info">
@@ -100,7 +102,7 @@
 	<div id="map-footer">
 		<div id="map-footer-container" class="row">
 			<div class="timeline-info-container col-md-2">
-				<div class="timeline-year">Year: 1970</div>
+				<div class="timeline-year">Year: 1816</div>
 				<div id="timeline-buttons">
 					<button type="button" class="animate-btn btn btn-primary">
 						<i class="fa fa-play fa-fw"></i>
@@ -112,7 +114,7 @@
 			</div>
 			<div class="timeline-container col-md-10">
 				<div class="vis-explain">Drag the slider to see alliances for different years, or click play to start the animation</div>
-				<input type="range" min="1816" max="2012" value="1970" id="year" step="1" oninput="updateVisualization(false)">
+				<input type="range" min="1816" max="2012" value="1816" id="year" step="1" oninput="updateVisualization(false)">
 			</div>
 		</div>
 	</div>
