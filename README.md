@@ -6,7 +6,7 @@ Evolving Alliances is an exploration into the changing landscape of internationa
 
 The visualization can be accessed here: TODO
 
-A screencast of the different features of our visualization can be viewed here: TODO
+A screencast of the different features of our visualization can be viewed [here](http://jeffjc97.github.io/CS-171-Evolving-Alliances/).
 
 # Features
 - On the home page, there are links to the other pages of the site - project overview, visualization, and data overview.
