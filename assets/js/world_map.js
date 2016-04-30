@@ -27,7 +27,7 @@ $('.global-vis-btn').click(function() {
 		$('#global-vis-select').find('.active').removeClass('active');
 		$(this).addClass('active');
 		animateAlliances("end");
-		console.log($(this).attr("vtype"));
+		//console.log($(this).attr("vtype"));
 		if ($(this).attr("vtype") == "map") {
 			$('#zoom-buttons').show();
 			svg.style("display", "block");
@@ -197,7 +197,7 @@ function updateVisualization(fromAnimation) {
 			d3.select(this)
 				.style("fill", "#4EB980")
 				.style("cursor", "pointer");
-			console.log(svg.selectAll("line"));
+			//console.log(svg.selectAll("line"));
 			// svg.selectAll("line").filter(function(l) {
 			// 	if (codes[d.id].ccode == l.source || codes[d.id].ccode == l.target) {
 			// 		return true;
@@ -343,8 +343,8 @@ function updateForce(n, l) {
 		d.target = idIndices.indexOf(+d.target);
 	});
 
-	console.log(nodes);
-	console.log(links);
+	//console.log(nodes);
+	//console.log(links);
 
 	force
 		.nodes(nodes)
@@ -368,7 +368,7 @@ function updateForce(n, l) {
 		.attr("x2", function(d) { return d.target.x; })
 		.attr("y2", function(d) { return d.target.y; })
 		.style("stroke", "#a4dbbd");
-
+	console.log(nodes);
 	var node = forceSvg.selectAll("g")
 		.data(nodes)
 		.enter().append("g")
@@ -376,7 +376,12 @@ function updateForce(n, l) {
 		.call(force.drag)
 		.append("path")
 		.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-		.attr("d", function(d) { return path(d.feature); })
+		.attr("d", function(d) { if(d.feature){
+			return path(d.feature);
+		}
+			//circles for countries that don't exist today (not in the GeoJSON)
+			return "M"+ d.x +","+ d.y +"a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0";
+		})
 		.style("fill", "#126e61")
 		.style("fill-opacity", 0.8)
 		.on('mouseover', tip.show)
