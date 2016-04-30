@@ -1,82 +1,15 @@
-// alliances highlight if hover over country
-// clicking dragging still scrolls down
-
+// svg dimensions
 var width = 1000,
 	height = 600,
 	center = [width / 2, height / 2];
 
-var intervalID = -1;
-$('.animate-btn').click(function() {
-	animateAlliances("start");
-});
-$('.stop-btn').click(function() {
-	animateAlliances("end");
-});
-
-$('.alliance-type-btn').click(function() {
-	if (!$(this).hasClass('active')) {
-		$('#alliance-type-select').find('.active').removeClass('active');
-		$(this).addClass('active');
-		animateAlliances("end");
-		updateVisualization(false);
-	}
-});
-
-$('.global-vis-btn').click(function() {
-	if (!$(this).hasClass('active')) {
-		$('#global-vis-select').find('.active').removeClass('active');
-		$(this).addClass('active');
-		animateAlliances("end");
-		//console.log($(this).attr("vtype"));
-		if ($(this).attr("vtype") == "map") {
-			$('#zoom-buttons').show();
-			svg.style("display", "block");
-			forceSvgPre.style("display", "none");
-		}
-		else {
-			$('#zoom-buttons').hide();
-			svg.style("display", "none");
-			forceSvgPre.style("display", "block");
-		}
-	}
-});
-
-$('#map-footer-expand').click(function() {
-	if ($(this).hasClass("open")) {
-		$(this).css("padding-left", "1%");
-		$('#map-footer').css("height", 0);
-		$(this).css("bottom", 0);
-		$("#footer-label").text("Change Year");
-		$(".map-footer-icon").removeClass("fa-chevron-down");
-		$(".map-footer-icon").addClass("fa-chevron-up");
-	}
-	else {
-		$('#map-footer').css("height", "10%");
-		$(this).css("bottom", "10%");
-		$(this).css("padding-left", "0%");
-		$("#footer-label").text("");
-		$(".map-footer-icon").removeClass("fa-chevron-up");
-		$(".map-footer-icon").addClass("fa-chevron-down");
-	}
-	$(this).toggleClass("open");
-	// $("#map-footer").css("height", '10%');
-	// $(this).hide();
-});
-
-$('#map-footer-expand').hover(
-	function() {
-		$('.map-footer-icon').css("opacity", 0.6);
-	},
-	function() {
-		$('.map-footer-icon').css("opacity", 1);
-	}
-)
+initHandlers();
 
 var year;
 
 var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", move);
 
-
+// world map svg
 var svg = d3.select("#world-map").append("svg")
 	.attr("width", width)
 	.attr("height", height)
@@ -88,6 +21,7 @@ var g = svg.append("g");
 
 svg.call(zoom);
 
+// country view svg
 var countrySvg = d3.select("#country-view").append("svg")
 	.attr("width", width)
 	.attr("height", height)
@@ -95,7 +29,7 @@ var countrySvg = d3.select("#country-view").append("svg")
 	.style("display", "block")
 	.style("margin", "auto");
 	
-
+// force diagram svg
 var forceSvgPre = d3.select("#world-map").append("svg")
 	.attr("width", width)
 	.attr("height", height)
@@ -106,6 +40,7 @@ var forceSvgPre = d3.select("#world-map").append("svg")
 
 var forceSvg = forceSvgPre.append("g");
 
+// loading screen for the force diagram svg
 var loadingScreen = d3.select("#force-map svg").append("rect")
 	.attr("x", 0)
 	.attr("y", 0)
@@ -114,6 +49,7 @@ var loadingScreen = d3.select("#force-map svg").append("rect")
 	.attr("fill", "grey")
 	.style("fill-opacity", 0);
 
+// setting up force diagram
 force = d3.layout.force()
 			.size([width, height])
 			.gravity(0.01)
@@ -132,7 +68,7 @@ var projection = d3.geo.mercator()
 
 var path = d3.geo.path().projection(projection);
 
-// Load data parallel
+// Load data in parallel
 queue()
 	.defer(d3.json, "data/world-110m.json")
 	.defer(d3.json, "data/alliances.json")
@@ -162,12 +98,13 @@ queue()
 		updateVisualization(false);
 	});
 
+// function that gets called each time a change is made in the parameters of the visualization
 function updateVisualization(fromAnimation) {
 	world = topojson.feature(data1, data1.objects.countries).features;
 
+	// getting year and alliance_type selected in the visualizatoin
 	year = d3.select("#year").property("value");
 	$('.timeline-year').text('Year: ' + year);
-
 	alliance_type = +$('#alliance-type-select').find('.active').attr('atype');
 
 	var tip = d3.tip()
@@ -185,6 +122,7 @@ function updateVisualization(fromAnimation) {
 
 	svg.call(tip);
 
+	// adding countries to the map view
 	g.selectAll("path")
 		.data(world)
 		.enter()
@@ -197,13 +135,6 @@ function updateVisualization(fromAnimation) {
 			d3.select(this)
 				.style("fill", "#4EB980")
 				.style("cursor", "pointer");
-			//console.log(svg.selectAll("line"));
-			// svg.selectAll("line").filter(function(l) {
-			// 	if (codes[d.id].ccode == l.source || codes[d.id].ccode == l.target) {
-			// 		return true;
-			// 	}
-			// 	return false;
-			// }).style("stroke", "red");
 			return tip
 				.style("top", (d3.event.pageY - 40) + "px")
 				.style("left", (d3.event.pageX) + "px");
@@ -211,12 +142,6 @@ function updateVisualization(fromAnimation) {
 		.on('mouseout', function (d) {
 			var currentState = this;
 			d3.select(this).style("fill", "#126e61");
-			// svg.selectAll("line").filter(function(l) {
-			// 	if (codes[d.id].ccode == l.source || codes[d.id].ccode == l.target) {
-			// 		return true;
-			// 	}
-			// 	return false;
-			// }).style("stroke", "#a4dbbd");
 			tip.hide();
 		})
 		.on("click", function(d) {
@@ -227,6 +152,7 @@ function updateVisualization(fromAnimation) {
 			}, 500);
 		});
 
+	// adding circles at the centers of countries
 	g.selectAll("circle")
 		.data(data2.nodes)
 		.enter()
@@ -246,6 +172,7 @@ function updateVisualization(fromAnimation) {
 		});
 	}
 
+	// links between countries in the map view
 	var line = g.selectAll("line")
 		.data(linkdata);
 
@@ -298,6 +225,7 @@ function updateVisualization(fromAnimation) {
 
 }
 
+// function called that makes all of the nevessary changes to the force diagram
 function updateForce(n, l) {
 	console.log("here");
 	forceSvg.selectAll("*").remove();
@@ -312,6 +240,7 @@ function updateForce(n, l) {
 	involvedCountriesSet = new Set(involvedCountries);
 	involvedCountries = Array.from(involvedCountriesSet);
 
+	// filtering so only nodes that have alliances are displayed
 	nodes = nodes.filter(function(n) {
 		if (involvedCountries.indexOf(n.id) > -1) {
 			return true;
@@ -322,6 +251,7 @@ function updateForce(n, l) {
 	});
 
 	idIndices = [];
+	// processing data into force diagram form
 	nodes.forEach(function(d) {
 		p = projection([d.longitude, d.latitude]);
 		d.x = p[0];
@@ -343,9 +273,6 @@ function updateForce(n, l) {
 		d.target = idIndices.indexOf(+d.target);
 	});
 
-	//console.log(nodes);
-	//console.log(links);
-
 	force
 		.nodes(nodes)
 		.links(links)
@@ -354,12 +281,12 @@ function updateForce(n, l) {
 	var tip = d3.tip()
 		.attr('class', 'd3-tip')
 		.html(function(d) {
-			//console.log(d);
 			return d.country;
 		});
 
 	svg.call(tip);
 
+	// setting up links in the force diagram
 	var link = forceSvg.selectAll("line")
 		.data(links)
 		.enter().append("line")
@@ -369,6 +296,7 @@ function updateForce(n, l) {
 		.attr("y2", function(d) { return d.target.y; })
 		.style("stroke", "#a4dbbd");
 	console.log(nodes);
+	// setting up country svg nodes in the force diagram
 	var node = forceSvg.selectAll("g")
 		.data(nodes)
 		.enter().append("g")
@@ -386,21 +314,20 @@ function updateForce(n, l) {
 		.style("fill-opacity", 0.8)
 		.on('mouseover', tip.show)
 
-		 .on("mousemove", function (d) {
-		 	var currentState = this;
-		 	d3.select(this)
-		 		.style("fill", "#4EB980")
-		 		.style("cursor", "pointer");
-		 	return tip
-		 		.style("top", (d3.event.pageY - 40) + "px")
-		 		.style("left", (d3.event.pageX) + "px");
-		 })
-		 .on('mouseout', function (d) {
-		 	var currentState = this;
-		 	d3.select(this).style("fill", "#126e61");
-		 	tip.hide();
-		 })
-
+		.on("mousemove", function (d) {
+			var currentState = this;
+			d3.select(this)
+				.style("fill", "#4EB980")
+				.style("cursor", "pointer");
+			return tip
+				.style("top", (d3.event.pageY - 40) + "px")
+				.style("left", (d3.event.pageX) + "px");
+		})
+		.on('mouseout', function (d) {
+			var currentState = this;
+			d3.select(this).style("fill", "#126e61");
+			tip.hide();
+		})
 		.on("click", function(d) {
 			if (d3.event.defaultPrevented) return;
 			country_id = codes_to_ids(d.id);
@@ -422,6 +349,8 @@ function updateForce(n, l) {
 
 }
 
+// function that is called whenever the animation is turned on
+// iterates through data for different years
 function animateAlliances(type) {
 	year = +d3.select("#year").property("value");
 	if (type == "start" && intervalID == -1) {
@@ -448,8 +377,8 @@ function animateAlliances(type) {
 	}
 }
 
+// function for panning functionality of the map view
 function move() {
-
 	var t = d3.event.translate,
 		s = d3.event.scale;
 	t[0] = Math.min(0 * (s - 1), Math.max(width * (1 - s), t[0]));
@@ -459,7 +388,8 @@ function move() {
 	g.selectAll("circle").attr("r", 3 / s);
 }
 
-//zoom by clicking buttons (based on: https://gist.github.com/mgold/c2cc7242c8f800c736c4)
+//zoom by clicking buttons
+// (based on: https://gist.github.com/mgold/c2cc7242c8f800c736c4)
 d3.selectAll('.zoom').on('click', function(){
 	d3.event.preventDefault();
 	var scale = zoom.scale(),
@@ -493,6 +423,7 @@ d3.selectAll('.zoom').on('click', function(){
 	});
 });
 
+// function that deals with updating of the bottom visualization 
 function updateCountry(id){
 
 	year = d3.select("#year").property("value");
@@ -534,10 +465,9 @@ function updateCountry(id){
 		}
 	});
 
+	// coloring countries based on alliance status
 	d3.selectAll(".country")
 		.style("fill", function(d) {
-			//console.log(d.id);
-			//console.log(codes[d.id]);
 			if (d.id == id){
 				return "#126e61";
 			} else if (d.id in codes){
@@ -579,6 +509,7 @@ function updateCountry(id){
 		.attr("class", "key")
 		.attr("transform", "translate(" + 100 + "," + (height-200) + ")");
 
+	// scale for visualization
 	g.selectAll("rect")
 		.data(["#126e61","#810f7c","#8856a7","#8c96c6","#b3cde3","gray"])
 		.enter().append("rect")
@@ -596,6 +527,8 @@ function updateCountry(id){
 
 }
 
+// function that calculates the length of links in the force diagram
+// depends on the type of alliance two countries have
 function getDistance(arr) {
 	if (arr[0] == 1) {
 		return 30;
@@ -611,11 +544,11 @@ function getDistance(arr) {
 	}
 	// should never happen
 	else {
-		console.log("wtf");
 		return 1000;
 	}
 }
 
+// load screen that displays whenever the animation is starting for the force diagram
 function loadScreen(toggle) {
 	if (toggle) {
 		if ($($('.global-vis-btn')[1]).hasClass("active")) {
@@ -636,6 +569,7 @@ function loadScreen(toggle) {
 
 }
 
+// converting the global id to the dataset country code
 function codes_to_ids (ccode) {
 	for (var key in codes) {
 		if (codes.hasOwnProperty(key)) {
@@ -661,4 +595,76 @@ function showHistory(year){
 	else {
 		$("#info").html("Some years have historical events that can explain interesting changes in the alliance landscape. Explore the visualization to learn more!");
 	}
+}
+
+// initialize all of the event handlers for various aspects of the visualization
+function initHandlers() {
+	// click handlers for the pause/play animation buttons
+	var intervalID = -1;
+	$('.animate-btn').click(function() {
+		animateAlliances("start");
+	});
+	$('.stop-btn').click(function() {
+		animateAlliances("end");
+	});
+
+	// click handler for the animation type select
+	$('.alliance-type-btn').click(function() {
+		if (!$(this).hasClass('active')) {
+			$('#alliance-type-select').find('.active').removeClass('active');
+			$(this).addClass('active');
+			animateAlliances("end");
+			updateVisualization(false);
+		}
+	});
+
+	// click handler for the visualization type select
+	$('.global-vis-btn').click(function() {
+		if (!$(this).hasClass('active')) {
+			$('#global-vis-select').find('.active').removeClass('active');
+			$(this).addClass('active');
+			animateAlliances("end");
+			if ($(this).attr("vtype") == "map") {
+				$('#zoom-buttons').show();
+				svg.style("display", "block");
+				forceSvgPre.style("display", "none");
+			}
+			else {
+				$('#zoom-buttons').hide();
+				svg.style("display", "none");
+				forceSvgPre.style("display", "block");
+			}
+		}
+	});
+
+	// click handler for the footer expand/contract
+	$('#map-footer-expand').click(function() {
+		if ($(this).hasClass("open")) {
+			$(this).css("padding-left", "1%");
+			$('#map-footer').css("height", 0);
+			$(this).css("bottom", 0);
+			$("#footer-label").text("Change Year");
+			$(".map-footer-icon").removeClass("fa-chevron-down");
+			$(".map-footer-icon").addClass("fa-chevron-up");
+		}
+		else {
+			$('#map-footer').css("height", "10%");
+			$(this).css("bottom", "10%");
+			$(this).css("padding-left", "0%");
+			$("#footer-label").text("");
+			$(".map-footer-icon").removeClass("fa-chevron-up");
+			$(".map-footer-icon").addClass("fa-chevron-down");
+		}
+		$(this).toggleClass("open");
+	});
+
+	// css animation for footer expand/contract
+	$('#map-footer-expand').hover(
+		function() {
+			$('.map-footer-icon').css("opacity", 0.6);
+		},
+		function() {
+			$('.map-footer-icon').css("opacity", 1);
+		}
+	);
 }
