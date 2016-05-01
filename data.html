@@ -41,7 +41,10 @@
 			This project uses version 4.1 of the “Formal Alliances” dataset available through the
 			<a href="http://www.correlatesofwar.org">Correlates of War</a> project [1]. The “Formal Alliances”
 			dataset includes time series data on different types of alliances between members of the interstate
-			system, covering a period from 1816 to 2012.
+			system, covering a period from 1816 to 2012. We also used <a href="https://developers.google.com/public-data/docs/canonical/countries_csv">Google's developer country dataset</a> for country coordinates.
+		</p>
+		<p>
+			To preprocess the data, we had to first link the Google country coordinates to the dataset country IDs, a process we wrote a Python script to accomplish. We also had to convert the data into nodes and links in order for the data to be usable in our visualizations, which we also accomplished through a Python script. Lastly, due to the changing landscape of the world over time, we had to manually make some changes for countries that no longer exist or ones that were established recently.
 		</p>
 		<p>
 			The types of alliances represented in the dataset include:
